@@ -1,22 +1,27 @@
 # **Intro to SE ReadME**
 
 ## TEAM MEMBERS
+### <ins>Brayden Mendez</ins> 
+Github Username: Brayden-Mendez  
+Front End Development  
+Using HTML with Bootstrap framework
 
-### Brayden Mendez  
-Github Username: 
- 
-
-### Thomas Nguyen  
+### <ins>Thomas Nguyen</ins>
 Github Username: Tnguyen0525  
 Front End Development  
 Using HTML with Bootstrap framework
 
-### Nina Miles  
-Github Username: nmiles1111
+
+### <ins>Nina Miles</ins>
+Github Username: nmiles1111  
+Back End Development  
+Using C++
 
 
-### Charles Lenson  
-GitHub Username: cdl431
+### <ins>Charles Lenson</ins>
+GitHub Username: cdl431  
+Back End Development  
+Using C++
 
 
 
