@@ -9,7 +9,7 @@ Github Username:
 ### Thomas Nguyen  
 Github Username: Tnguyen0525  
 Front End Development  
-
+Using HTML with Bootstrap framework
 
 ### Nina Miles  
 Github Username: nmiles1111
