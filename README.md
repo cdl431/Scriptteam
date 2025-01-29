@@ -1,22 +1,24 @@
-# Intro to SE ReadME 
+# **Intro to SE ReadME**
 
-TEAM MEMBERS
+## TEAM MEMBERS
 
-Brayden Mendez
+### Brayden Mendez  
 Github Username: 
  
 
-Thomas Nguyen 
-Github Username: Tnguyen0525 
-601-500-1758
+### Thomas Nguyen  
+Github Username: Tnguyen0525  
+Phone Number 601-500-1758
 
 
 
-Nina Miles
+### Nina Miles  
 Github Username: nmiles1111
 
 
-Charles Lenson
+### Charles Lenson  
+GitHub USername:
+
 
 
 
