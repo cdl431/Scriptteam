@@ -16,7 +16,7 @@ Github Username: nmiles1111
 
 
 ### Charles Lenson  
-GitHub USername: cdl431
+GitHub Username: cdl431
 
 
 
