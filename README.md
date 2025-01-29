@@ -8,7 +8,6 @@ Github Username:
 
 ### Thomas Nguyen  
 Github Username: Tnguyen0525  
-Phone Number 601-500-1758  
 Front End Development  
 
 
