@@ -1,2 +1,20 @@
 # Intro to SE ReadME 
-scooby doo
+
+# TEAM MEMBERS
+
+# Brayden Mendez
+# Github Username: 
+# 
+#
+# Thomas Nguyen
+#
+#
+#
+# Nina Miles
+#
+#
+#
+# Charles Lenson
+#
+#
+#
