@@ -1,7 +1,7 @@
 # **Intro to SE ReadME**
 
 ## DESCRIPTION
-The objective of our E-Commerce website is to design a digital marketplace that allows user to sell and purchase different forms of media such as, books, movies, games, and music.
+The objective of our E-Commerce website is to design a digital marketplace that allows user to sell and purchase different forms of media such as, books, movies, games, and music. We hope to design our platformm to allow users to purchase items from other users and post items for sale.
 
 ## TEAM MEMBERS
 ### <ins>Brayden Mendez</ins> 
