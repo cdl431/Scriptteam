@@ -7,12 +7,14 @@ The objective of our E-Commerce website is to design a digital marketplace that 
 ### <ins>Brayden Mendez</ins> 
 Github Username: Brayden-Mendez  
 NetID: bdm458  
+Email: mendez.brayden@icloud.com
 Front End Development  
 Using HTML with Bootstrap framework
 
 ### <ins>Thomas Nguyen</ins>
 Github Username: Tnguyen0525  
 NetID: Thn70    
+Email: thrifty5000@gmail.com  
 Front End Development  
 Using HTML with Bootstrap framework
 
@@ -20,6 +22,7 @@ Using HTML with Bootstrap framework
 ### <ins>Nina Miles</ins>
 Github Username: nmiles1111  
 NetID: nmm277    
+Email: nmiles1111@gmail.com  
 Back End Development  
 Using C++
 
@@ -27,13 +30,15 @@ Using C++
 ### <ins>Charles Lenson</ins>
 GitHub Username: cdl431  
 NetID: cdl431   
+Email: charleslensonthird012@gmail.com  
 Back End Development  
 Using C++
 
 
 ### <ins>AJ Fletcher
 Github Username: AJ1Fletcher  
-NetID: akf215    
+NetID: akf215  
+Email: fletcher.aj04@gmail.com  
 Back End Development  
 Using C++  
 
