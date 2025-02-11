@@ -7,7 +7,7 @@ The objective of our E-Commerce website is to design a digital marketplace that 
 ### <ins>Brayden Mendez</ins> 
 Github Username: Brayden-Mendez  
 NetID: bdm458  
-Email: mendez.brayden@icloud.com
+Email: mendez.brayden@icloud.com  
 Front End Development  
 Using HTML with Bootstrap framework
 
