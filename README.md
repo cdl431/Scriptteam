@@ -1,5 +1,8 @@
 # **Intro to SE ReadME**
 
+## DESCRIPTION
+The objective of our E-Commerce website is to design a digital marketplace that allows user to sell and purchase different forms of media such as, books, movies, games, and music.
+
 ## TEAM MEMBERS
 ### <ins>Brayden Mendez</ins> 
 Github Username: Brayden-Mendez  
