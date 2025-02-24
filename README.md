@@ -1,7 +1,14 @@
 # **Intro to SE ReadME**
 
 ## DESCRIPTION
-The objective of our E-Commerce website is to design a digital marketplace that allows user to sell and purchase different forms of media such as, books, movies, games, and music. We hope to design our platformm to allow users to purchase items from other users and post items for sale.
+EZ-Watch is a E-Commerce website designed to function as a digital marketplace that allows user to sell and purchase different forms of media such as, books, movies, games, and music. We hope to design our platformm to allow users to purchase items from other users and post items for sale.
+
+## OBJECTIVE 
+The objective of our E-Commerce website is to provide customers access to different forms of media such as, books, movies, games, and music. 
+
+## FEATURES
+User will be able to access our website as a guest or create an account to become a user. Guests may buy products as they are available while users may buy and post items for sale. 
+
 
 ## TEAM MEMBERS
 ### <ins>Brayden Mendez</ins> 
