@@ -1,4 +1,4 @@
-/frontend
+/frontend (folder)
 ├── index.html              ← Homepage / featured items / intro
 ├── login.html              ← Login & registration form
 ├── shopping.html           ← Product browsing + search/filter
@@ -10,12 +10,10 @@
 ├── edit-product.html       ← Form to edit product listing
 ├── admin.html              ← Admin dashboard (approve, flag, etc.)
 │
-├── css/
+├── css/ (folder)
 │   ├── styles.css          ← Main stylesheet
-│   ├── admin.css           ← Optional: Admin-only theme
-│   └── responsive.css      ← Optional: Mobile responsiveness
 │
-├── js/
+├── js/ (folder)
 │   ├── main.js             ← Shared scripts (nav, general UI)
 │   ├── auth.js             ← Login, registration validation
 │   ├── cart.js             ← Add/remove from cart, totals
@@ -24,5 +22,5 @@
 │   ├── account.js          ← User info, order history scripts
 │   └── admin.js            ← Approve users, moderate listings
 │
-├── images/                 ← Logos, icons, demo product pics
+├── images/ (folder)        ← Logos, icons, demo product pics
 │   └── ...
