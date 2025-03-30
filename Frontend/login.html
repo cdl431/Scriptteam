@@ -3,10 +3,46 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EZ-Watch</title>
+  <title>Login & Sign Up - EZ-Watch</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+  <header>
+    <nav class="navbar">
+      <div class="logo">EZ-Watch</div>
+      <ul class="nav-links">
+        <li><a href="HomePage.html">Home</a></li>
+        <li><a href="shopping.html">Shop</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="account.html">Account</a></li>
+        <li><a href="cart.html">Cart</a></li>
+      </ul>
+    </nav>
+  </header>
+  
+  <div class="login-page">
+    <div class="form-container">
+      <!-- Login Form -->
+      <div class="login-form form">
+        <h2>Login to EZ-Watch</h2>
+        <form action="login_action_page.php" method="POST">
+          <input type="text" placeholder="Username" name="username" required />
+          <input type="password" placeholder="Password" name="password" required />
+          <input type="submit" value="Log In" />
+        </form>
+      </div>
 
+      <!-- Sign Up Form -->
+      <div class="signup-form form">
+        <h2>Sign Up for EZ-Watch</h2>
+        <form action="signup_action_page.php" method="POST">
+          <input type="text" placeholder="Username" name="username" required />
+          <input type="email" placeholder="Email" name="email" required />
+          <input type="password" placeholder="Password" name="password" required />
+          <input type="submit" value="Sign Up" />
+        </form>
+      </div>
+    </div>
+  </div>
 </body>
 </html>

@@ -66,17 +66,47 @@ body {
     color: #aaa;
   }
 
+/*_____________________________________________________________________________*/
+
+  .auth-buttons {
+    position: fixed;
+    top: 15px;
+    right: 20px;
+    display: flex;
+    flex-direction: row; 
+    gap: 10px;
+    z-index: 1000;
+  }
+  
+  
+  .auth-btn {
+    background-color: #66ccff;
+    color: #111;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s ease;
+  }
+  
+  .auth-btn:hover {
+    background-color: #ffffff;
+    color: #000;
+  }
+
+/*_____________________________________________________________________________*/
 /*vvv SHOPPING PAGE vvv*/
 
 #search-bar {
   display: flex;
-  justify-content: center; /* This centers the search bar horizontally */
-  margin-top: 20px; /* Adds space between the search bar and the header */
+  justify-content: center; 
+  margin-top: 20px; 
 }
 
 #search-bar .bar {
   display: flex;
-  width: 60%; /* You can adjust the width to your preference */
+  width: 60%;
 }
 
 #search-bar input {
@@ -178,30 +208,87 @@ body {
     right: 10px;
   }
 
-  .auth-buttons {
-    position: fixed;
-    top: 15px;
-    right: 20px;
-    display: flex;
-    flex-direction: row; 
-    gap: 10px;
-    z-index: 1000;
-  }
-  
-  
-  .auth-btn {
-    background-color: #66ccff;
-    color: #111;
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: bold;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
-    transition: background-color 0.3s ease;
-  }
-  
-  .auth-btn:hover {
-    background-color: #ffffff;
-    color: #000;
-  }
+/*_____________________________________________________________________________*/
+/*vvv LOGIN PAGE vvv*/
 
+/* Login Page Container */
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; 
+  background-color: #111; 
+}
+
+/* Form Container - Centered and fixed width */
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  background-color: #222;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  max-width: 450px;
+}
+
+/* Ensure the forms within the container are aligned */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Adjust this to control space between all form elements */
+}
+
+/* Input field styling */
+input[type="text"], input[type="password"], input[type="email"] {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+  background-color: #333;
+  color: #fff;
+  width: 100%;
+}
+
+/* Button styling */
+input[type="submit"] {
+  padding: 10px;
+  background-color: #088178;
+  color: #fff;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.signup-form input[type="submit"], .login-form input[type="submit"] {
+  margin-top: 20px;  /* Ensure consistent spacing between input fields and buttons */
+}
+
+input[type="submit"]:hover {
+  background-color: #066b5f;
+}
+
+/* Spacing between the fields */
+input[type="text"] {
+  margin-bottom: 20px; 
+}
+
+input[type="email"] {
+  margin-bottom: 20px; 
+}
+
+input[type="password"] {
+  margin-top: 20px; 
+}
+
+/* Signup form styling */
+.signup-form {
+  display: block;
+}
+
+.signup-form input {
+  margin-top: 10px;
+}
