@@ -206,6 +206,7 @@ footer {
   transition: background-color 0.3s;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+  height: 40px;
 }
 
 #search-bar button:hover {
