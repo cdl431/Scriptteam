@@ -7,32 +7,41 @@
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header>
-    <nav class="navbar">
-      <div class="logo">EZ-Watch</div>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo-container">
+        <img src="images/logo.png" alt="EZ-Watch Logo" class="logo-img">
+      </div>
       <ul class="nav-links">
-        <li><a href="HomePage.html">Home</a></li>
+        <li><a href="index.html">Home</a></li>
         <li><a href="shopping.html">Shop</a></li>
-        <li><a href="login.html">Login</a></li>
         <li><a href="account.html">Account</a></li>
         <li><a href="cart.html">Cart</a></li>
       </ul>
-    </nav>
-  </header>
+    </aside>
 
-  <main class="main-content">
-    <h1>Welcome to EZ-Watch!</h1>
-    <p> Home to peer to peer entertainment commerce.</p>
-  </main>
+    <div class="main">
+      <header class="topbar">
+        <div class="search-container">
+          <input type="text" placeholder="Search..." />
+        </div>
+        <div class="page-title">
+          <div class="title-main">Welcome to EZ-Watch!</div>
+          <div class="subtitle">Home to peer to peer entertainment commerce.</div>
+        </div>
+        <div class="auth-buttons">
+          <a href="login.html" class="auth-btn">Log In</a>
+          <a href="signup.html" class="auth-btn">Sign Up</a>
+        </div>
+      </header>
+      
+      <main class="main-content">
+      </main>
 
-  <footer>
-    <p>&copy; 2025 EZ-Watch.</p>
-  </footer>
-
-  <div class="auth-buttons">
-    <a href="login.html" class="auth-btn">Log In</a>
-    <a href="signup.html" class="auth-btn">Sign Up</a>
+      <footer>
+        <p>&copy; 2025 EZ-Watch.</p>
+      </footer>
+    </div>
   </div>
-  
 </body>
 </html>
