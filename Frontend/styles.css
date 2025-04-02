@@ -55,8 +55,17 @@ body, html {
   display: block;
 }
 
+.branding {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 20px;
+}
 
-
+.topbar-logo {
+  height: 50px;
+  width: auto;
+}
 
 .nav-links {
   list-style: none;
@@ -83,7 +92,8 @@ body, html {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-y: auto; 
+  width: 100%;
 }
 
 .topbar {
@@ -92,31 +102,31 @@ body, html {
   justify-content: space-between;
   background-color: #222;
   padding: 0 20px;
-  height: 80px; 
+  height: 80px;
   box-sizing: border-box;
+  width: 100%;
 }
+
+
 
 .page-title {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  text-align: center;
+  align-items: flex-start;
+  text-align: left;
 }
 
-
-
 .title-main {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: bold;
+  margin-bottom: 2px;
 }
 
 .subtitle {
   font-size: 14px;
-  margin-top: 4px;
   color: #ccc;
 }
+
 
 .auth-buttons {
   flex: 1;
@@ -157,58 +167,6 @@ footer {
   text-align: center;
 }
 
-/*_____________________________________________________________________________*/
-/*vvv Scrolling vvv*/
-.layout {
-  display: flex;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto; /* Allow vertical scrolling */
-}
-
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  width: 200px;
-  background-color: #111;
-  height: 100vh;
-  margin: 0;
-  padding: 0;
-}
-
-.topbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #222;
-  padding: 0 20px;
-  height: 80px;
-  box-sizing: border-box;
-}
-
-.page-title {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  text-align: center;
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-footer {
-  padding: 10px;
-  background-color: #222;
-  color: #aaa;
-  text-align: center;
-}
 
 /*_____________________________________________________________________________*/
 /*vvv SHOPPING PAGE vvv*/
