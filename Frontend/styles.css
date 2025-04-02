@@ -55,8 +55,17 @@ body, html {
   display: block;
 }
 
+.branding {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 20px;
+}
 
-
+.topbar-logo {
+  height: 50px;
+  width: auto;
+}
 
 .nav-links {
   list-style: none;
@@ -83,7 +92,8 @@ body, html {
   flex: 1;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-y: auto; 
+  width: 100%;
 }
 
 .topbar {
@@ -92,31 +102,31 @@ body, html {
   justify-content: space-between;
   background-color: #222;
   padding: 0 20px;
-  height: 80px; 
+  height: 80px;
   box-sizing: border-box;
+  width: 100%;
 }
+
+
 
 .page-title {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-  text-align: center;
+  align-items: flex-start;
+  text-align: left;
 }
 
-
-
 .title-main {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: bold;
+  margin-bottom: 2px;
 }
 
 .subtitle {
   font-size: 14px;
-  margin-top: 4px;
   color: #ccc;
 }
+
 
 .auth-buttons {
   flex: 1;
@@ -163,13 +173,15 @@ footer {
 
 #search-bar {
   display: flex;
-  justify-content: center; 
-  margin-top: 20px; 
+  justify-content: center;
+  margin-top: 20px;
 }
 
 #search-bar .bar {
   display: flex;
-  width: 60%;
+  width: 100%;
+  max-width: 800px; /* Add max-width to avoid it stretching too wide */
+  margin: 0 auto; /* Center the search bar */
 }
 
 #search-bar input {
@@ -202,75 +214,78 @@ footer {
   background-color: #066b5f;
 }
 
-  .shopping-p1 {
-    padding: 40px 80px;
-  }
+/* Featured Products Section */
+#feature {
+  text-align: center;
+}
 
-  #feature {
-    text-align: center;
-  }
+#feature .pro-container {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 20px;
+  flex-wrap: wrap;
+}
 
-  #feature .pro-container {
-    display: flex;
-    justify-content: space-between;
-    padding-top: 20px;
-    flex-wrap: wrap;
-  }
+#feature .product {
+  width: 23%;
+  min-width: 250px;
+  padding: 10px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+  box-shadow: 0px 0px 20px rgb(64, 64, 64);
+  margin: 15px 0;
+  transition: 0.2s ease;
+  position: relative;
+}
 
-  #feature .product {
-    width: 23%;
-    min-width: 250px;
-    padding: 10px 12px;
-    /*border: 1px solid #f0f0f0;*/
-    border-radius: 20px;
-    cursor: pointer;
-    box-shadow: 0px 0px 20px rgb(64,64,64);
-    margin: 15px 0;
-    transition: 0.2s ease;
-    position: relative;
-  }
+#feature .product img {
+  width: 100%;
+  border-radius: 20px;
+}
 
-  #feature .product img {
-    width: 100%;
-    border-radius: 20px;
-  }
+#feature .product .description {
+  text-align: start;
+  padding: 10px 0;
+}
 
-  #feature .product .description {
-    text-align: start;
-    padding: 10px 0;
-  }
+#feature .product .description span {
+  color: #66ccff;
+  font-size: 12px;
+}
 
-  #feature .product .description span {
-    color: #66ccff;
-    font-size: 12px;
-  }
+#feature .product .description h5 {
+  padding-top: 7px;
+  color: #f0f0f0;
+  font-size: 14px;
+}
 
-  #feature .product .description h5 {
-    padding-top: 7px;
-    color: #f0f0f0;
-    font-size: 14px;
-  }
+#feature .product .description h4 {
+  padding-top: 7px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #088178;
+}
 
-  #feature .product .description h4 {
-    padding-top: 7px;
-    font-size: 15px;
-    font-weight: 700p;
-    color: #088178;
+#feature .product .cart {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 50px;
+  background-color: #e8f6ea;
+  font-weight: 500;
+  color: #088178;
+  border: 1px solid #cce7d0;
+  position: absolute;
+  bottom: 20px;
+  right: 10px;
+}
 
-  }
-  #feature .product .cart {
-    width: 40px;
-    height: 40px;
-    line-height: 40px;
-    border-radius: 50px;
-    background-color: #e8f6ea;
-    font-weight: 500;
-    color: #088178;
-    border: 1px solid #cce7d0;
-    position: absolute;
-    bottom: 20px;
-    right: 10px;
-  }
+#feature .product:hover {
+  box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.3);
+  transform: scale(1.05); /* Slight zoom effect */
+}
+
+
 
 /*_____________________________________________________________________________*/
 /*vvv LOGIN PAGE vvv*/
