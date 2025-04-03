@@ -392,20 +392,24 @@ input[type="password"] {
 
 .account-section {
   background-color: #1a1a1a;
-  padding: 30px;
+  padding: 40px 30px;
   border-radius: 10px;
   width: 100%;
   max-width: 500px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px; 
 }
 
 .account-info {
-  margin-bottom: 25px;
+  margin-bottom: 0;
 }
 
 .account-info h2 {
-  font-size: 22px;
+  font-size: 24px;
   margin-bottom: 10px;
   color: #66ccff;
 }
@@ -419,14 +423,15 @@ input[type="password"] {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 16px; 
   width: 100%;
 }
+
 
 .account-btn {
   background-color: #66ccff;
   color: #111;
-  padding: 10px 20px;
+  padding: 12px 24px; 
   border-radius: 5px;
   border: none;
   font-weight: bold;
