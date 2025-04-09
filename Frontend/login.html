@@ -21,5 +21,50 @@
       </div>
     </div>
   </div>
+ 
+  <!-- JavaScript -->
+  <script>
+  // Add an event listener to handle form submission
+  document.getElementById('login-form').addEventListener('submit', function(event) {
+    event.preventDefault();  // Prevent the form from submitting the traditional way
+
+    // Collect the form data
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    // Simulate sending data to the C++ backend (for now, it's a mock function)
+    loginRequest(username, password);
+  });
+
+  // Mock function to simulate sending login data to the C++ backend
+  function loginRequest(username, password) {
+    // Simulate a delay (like waiting for a server response)
+    setTimeout(() => {
+      // Example mock response
+      const mockResponse = simulateLoginBackend(username, password);
+      
+      if (mockResponse === 'approve') {
+        // If approved, redirect to the next page (or change behavior accordingly)
+        alert('Login successful!');
+        window.location.href = 'HomePage.html';  // Redirect to the homepage or dashboard
+      } else {
+        // If denied, show an error message
+        alert('Login unsuccessful...');
+        document.getElementById('error-message').style.display = 'block';
+      }
+    }, 1000);  // Simulate network delay
+  }
+
+  // Simulate the behavior of the C++ backend validating the login
+  function simulateLoginBackend(username, password) {
+    // For the purpose of the mock, use a simple check
+    // Replace this with real server-side logic later
+    if (username === 'testuser' && password === 'testpass') {
+      return 'approve';  // Simulate approved login
+    } else {
+      return 'deny';  // Simulate denied login
+    }
+  }
+</script>
 </body>
 </html>
