@@ -1,10 +1,18 @@
+import { logoutUser } from "./auth.js";
+import { isUserLoggedIn, getCurrentUser } from "./auth.js";
+
 document.addEventListener("DOMContentLoaded", () => {
     // Simulated user object until backend has data
     const mockUser = {
       name: "John Doe",
       email: "johndoe@example.com"
     };
-  
+
+    if (isUserLoggedIn()) {
+      const user = getCurrentUser();
+      console.log("User info:", user);
+    }
+    
     if (!localStorage.getItem("user")) {
       localStorage.setItem("user", JSON.stringify(mockUser));
     }
@@ -21,10 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
     const logoutBtn = document.querySelector(".account-btn.logout");
     if (logoutBtn) {
-      logoutBtn.addEventListener("click", () => {
-        localStorage.removeItem("user");
-        window.location.href = "login.html";
-      });
+      logoutBtn.addEventListener("click", logoutUser);
     }
   
     const editBtn = document.querySelector(".account-btn.edit");
