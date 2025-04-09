@@ -448,6 +448,67 @@ input[type="password"] {
   color: #000;
 }
 
+/* edit product styling */
+.edit-product-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+  color: #eee;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  background-color: #222;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #eee;
+}
+
+.edit-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.edit-header h1 {
+  font-size: 2rem;
+  margin: 0;
+}
+
+.edit-header p {
+  margin-top: 5px;
+  color: #ccc;
+  font-size: 0.95rem;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: flex-start;
+  gap: 12px; 
+  margin-top: 20px;
+  flex-wrap: wrap; 
+}
+
+.form-buttons .account-btn {
+  width: auto;
+  min-width: 120px;
+  padding: 10px 20px;
+  flex: 1 1 auto;
+  text-align: center;
+}
+
+
 /* Cart Page Styling */
 .cart-section {
   width: 100%;
