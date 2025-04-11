@@ -571,3 +571,76 @@ input[type="password"] {
   background-color: #fff;
   color: #000;
 }
+ /* admin section */
+.admin-section {
+  background-color: #1a1a1a;
+  padding: 40px 30px;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 900px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  color: #eee;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.admin-header {
+  text-align: center;
+}
+
+.admin-header h1 {
+  font-size: 28px;
+  color: #66ccff;
+}
+
+.admin-header p {
+  font-size: 16px;
+  color: #ccc;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.admin-table th,
+.admin-table td {
+  border: 1px solid #444;
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.admin-table th {
+  background-color: #222;
+  color: #66ccff;
+}
+
+.admin-table td {
+  background-color: #2a2a2a;
+  color: #eee;
+}
+
+.admin-btn {
+  background-color: #66ccff;
+  color: #111;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+}
+
+.admin-btn:hover {
+  background-color: #fff;
+  color: #000;
+}
+
+.admin-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel - EZ-Watch</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo-container">
+        <img src="images/logo.png" alt="EZ-Watch Logo" class="logo-img" />
+      </div>
+      <ul class="nav-links">
+        <li><a href="HomePage.html">Home</a></li>
+        <li><a href="shopping.html">Shop</a></li>
+        <li><a href="cart.html">Cart</a></li>
+      </ul>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="branding">
+          <div class="title-main">Admin Dashboard</div>
+          <div class="subtitle">Manage Users and Listings</div>
+        </div>
+        <div class="auth-buttons">
+          <a href="login.html" class="auth-btn">Log In</a>
+          <a href="signup.html" class="auth-btn">Sign Up</a>
+        </div>
+      </header>
+
+      <main class="main-content">
+        <section class="admin-section">
+          <h2>User Management</h2>
+          <div id="userList" class="admin-table"></div>
+
+          <h2>Product Management</h2>
+          <div id="productList" class="admin-table"></div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script src="Javascript/admin.js"></script>
+</body>
+</html>
