@@ -22,13 +22,10 @@
 
     <div class="main">
       <header class="topbar">
-        <div class="branding">
-          <div class="page-title">
-            <div class="title-main">My Account</div>
-            <div class="subtitle">Manage your EZ-Watch profile.</div>
-          </div>
+        <div class="page-title">
+          <div class="title-main">My Account</div>
+          <div class="subtitle">Manage your EZ-Watch profile.</div>
         </div>
-
         <div class="auth-buttons">
           <a href="login.html" class="auth-btn">Log In</a>
           <a href="signup.html" class="auth-btn">Sign Up</a>
@@ -41,22 +38,40 @@
             <h2>Welcome, [Username]</h2>
             <p>Email: user@example.com</p>
           </div>
-      
+
           <div class="account-actions">
-            <a href="#" id="edit-profile-btn" class="account-btn">Edit Profile</a>
+            <a href="#" id="edit-profile-btn" class="account-btn edit">Edit Profile</a>
             <a href="#" id="logout-btn" class="account-btn">Log Out</a>
             <a href="add-product.html" class="account-btn">Add Product</a>
             <a href="edit-product.html" class="account-btn">Edit Product</a>
           </div>
-          
+
+          <form id="editProfileForm" class="edit-profile-form" style="display: none;">
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" id="username" name="username" required />
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required />
+            </div>
+
+            <div class="form-buttons">
+              <button type="submit" class="account-btn">Save</button>
+              <button type="button" id="cancelEditBtn" class="account-btn">Cancel</button>
+            </div>
+          </form>
         </section>
       </main>
-          
     </div>
   </div>
 
   <footer>
     <p>&copy; 2025 EZ-Watch.</p>
   </footer>
+
+  <script type="module" src="Javascript/account.js"></script>
+
 </body>
 </html>
