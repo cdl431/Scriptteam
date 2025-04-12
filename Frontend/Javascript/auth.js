@@ -61,32 +61,30 @@ export function loginUser(userData) {
   
   // Mock function to simulate sending login data to the C++ backend
   function loginRequest(username, password) {
-    // Simulate a delay (like waiting for a server response)
-    setTimeout(() => {
-      // Example mock response
-      const mockResponse = simulateLoginBackend(username, password);
-      
-      if (mockResponse === 'approve') {
-        // If approved, redirect to the next page (or change behavior accordingly)
+    fetch('http://localhost:18080/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: username,
+        password: password
+      })
+    })
+    .then(res => res.text())
+    .then(data => {
+      if (data === 'approve') {
         alert('Login successful!');
-        window.location.href = 'HomePage.html';  // Redirect to the homepage or dashboard
+        loginUser({ email: username });  // Save user data locally
+        window.location.href = 'HomePage.html';
       } else {
-        // If denied, show an error message
-        alert('Login unsuccessful...');
+        alert('Login failed!');
         document.getElementById('error-message').style.display = 'block';
       }
-    }, 1000);  // Simulate network delay
-  }
-  
-  // Simulate the behavior of the C++ backend validating the login
-  function simulateLoginBackend(username, password) {
-    // For the purpose of the mock, use a simple check
-    // Replace this with real server-side logic later
-    if (username === 'testuser' && password === 'testpass') {
-      return 'approve';  // Simulate approved login
-    } else {
-      return 'deny';  // Simulate denied login
-    }
+    })
+    .catch(error => {
+      console.error('Error logging in:', error);
+    });
   }
   
   // Simulate sending signup data to the C++ backend (replace with real API call later)
