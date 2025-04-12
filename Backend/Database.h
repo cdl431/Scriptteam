@@ -1,8 +1,8 @@
-#pragma once
+#ifndef DATABASE_H
+#define DATABASE_H
+
 #include <libpq-fe.h>
 #include <string>
-
-namespace std {
 
 class Database {
 private:
@@ -11,10 +11,11 @@ private:
 public:
     Database(const std::string& conninfo);
     ~Database();
-    bool isConnected() const;
-    PGconn* getConnection() const { return conn; }
+
     PGresult* executeQuery(const std::string& query);
     PGresult* executePrepared(const std::string& stmtName, int nParams, const char* const* paramValues);
+
+    bool isConnected() const;
 };
 
-}
+#endif
