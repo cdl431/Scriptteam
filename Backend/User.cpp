@@ -1,68 +1,60 @@
-#include "crow_all.h"
-#include "Database.h"
 #include "User.h"
+#include "Database.h"
+#include <iostream>
+#include <libpq-fe.h>
 
-using namespace std;
+namespace std {
 
-int main() {
-    string conninfo = "host=localhost port=5432 dbname=ezwatch user=postgres password=yourpassword";
-    Database db(conninfo);
+User::User(Database* db) : db(db) {}
 
-    if (!db.isConnected()) {
-        cerr << "Could not connect to DB." << endl;
-        return 1;
+std::string User::login(const std::string& email, const std::string& password) {
+    // Prepare query for login validation with status check
+    std::string query = "SELECT userID, name, status FROM Users WHERE email = '" + email + "' AND password = '" + password + "'";
+
+    // Execute query
+    PGresult* res = db->executeQuery(query);
+
+    // Check if the query executed successfully and if a user was found
+    if (PQntuples(res) == 0) {
+        PQclear(res);
+        return "deny";  // Return deny if no user found or credentials are incorrect
     }
 
-    // Prepare login statement
-    PGresult* prepRes = PQprepare(db.executeQuery(""), "login_stmt",
-        "SELECT userID, name, email FROM Users WHERE email = $1 AND password = $2",
-        0, NULL);
-    if (PQresultStatus(prepRes) != PGRES_COMMAND_OK) {
-        cerr << "Prepared statement failed: " << PQresultErrorMessage(prepRes) << endl;
+    // If credentials are valid, check the user's status
+    std::string userID = PQgetvalue(res, 0, 0);
+    std::string userName = PQgetvalue(res, 0, 1);
+    std::string userStatus = PQgetvalue(res, 0, 2);
+
+    PQclear(res);
+
+    // Return 'approve' or 'deny' based on user status
+    if (userStatus == "approved") {
+        return "approve";  // User is approved
+    } else {
+        return "deny";  // User is not approved (could be pending or denied)
     }
-    PQclear(prepRes);
+}
 
-    crow::SimpleApp app;
-    User user(&db);
+std::string User::registerUser(const std::string& name, const std::string& email, const std::string& password) {
+    // Prepare query to insert a new user into the database
+    std::string query = "INSERT INTO Users (name, email, password, role, status) VALUES ('" + name + "', '" + email + "', '" + password + "', 'Guest', 'pending')";
 
-    CROW_ROUTE(app, "/api/login").methods("POST"_method)([&user](const crow::request& req) {
-        auto body = crow::json::load(req.body);
-        if (!body) {
-            return crow::response(400, "Invalid JSON");
-        }
+    // Execute query
+    PGresult* res = db->executeQuery(query);
+    PQclear(res);
 
-        auto email = body["email"].s();
-        auto password = body["password"].s();
-        auto result = user.login(email, password);
-        return crow::response(result);
-    });
+    return "Registration successful.";
+}
 
-    CROW_ROUTE(app, "/api/register").methods("POST"_method)([&user](const crow::request& req) {
-        auto body = crow::json::load(req.body);
-        if (!body) {
-            return crow::response(400, "Invalid JSON");
-        }
+std::string User::updateProfile(int userID, const std::string& name, const std::string& email) {
+    // Prepare query to update user profile
+    std::string query = "UPDATE Users SET name = '" + name + "', email = '" + email + "' WHERE userID = " + std::to_string(userID);
 
-        auto name = body["name"].s();
-        auto email = body["email"].s();
-        auto password = body["password"].s();
-        auto result = user.registerUser(name, email, password);
-        return crow::response(result);
-    });
+    // Execute query
+    PGresult* res = db->executeQuery(query);
+    PQclear(res);
 
-    CROW_ROUTE(app, "/api/updateProfile").methods("POST"_method)([&user](const crow::request& req) {
-        auto body = crow::json::load(req.body);
-        if (!body) {
-            return crow::response(400, "Invalid JSON");
-        }
+    return "Profile updated successfully.";
+}
 
-        int userID = stoi(body["userID"].s());
-        string name = body["name"].s();
-        string email = body["email"].s();
-
-        auto result = user.updateProfile(userID, name, email);
-        return crow::response(result);
-    });
-
-    app.port(18080).multithreaded().run();
 }
