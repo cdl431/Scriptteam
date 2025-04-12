@@ -22,7 +22,6 @@ int main() {
     SupportRequest supportRequest(&db);
     Product product(&db);
 
-
     // user routes
     CROW_ROUTE(app, "/api/login").methods("POST"_method)([&user](const crow::request& req) {
         auto body = crow::json::load(req.body);
@@ -30,7 +29,13 @@ int main() {
 
         auto email = body["email"].s();
         auto password = body["password"].s();
-        return crow::response(user.login(email, password));
+        
+        string result = user.login(email, password);
+        if (result == "approve") {
+            return crow::response(200, "Login approved");
+        } else {
+            return crow::response(401, "Login denied");
+        }
     });
 
     CROW_ROUTE(app, "/api/register").methods("POST"_method)([&user](const crow::request& req) {
@@ -40,7 +45,10 @@ int main() {
         auto name = body["name"].s();
         auto email = body["email"].s();
         auto password = body["password"].s();
-        return crow::response(user.registerUser(name, email, password));
+        
+
+        string registrationStatus = user.registerUser(name, email, password);
+        return crow::response(200, registrationStatus);  // Return registration status
     });
 
     CROW_ROUTE(app, "/api/updateProfile").methods("POST"_method)([&user](const crow::request& req) {
@@ -50,9 +58,12 @@ int main() {
         int userID = stoi(body["userID"].s());
         string name = body["name"].s();
         string email = body["email"].s();
+        
 
-        return crow::response(user.updateProfile(userID, name, email));
+        string updateStatus = user.updateProfile(userID, name, email);
+        return crow::response(200, updateStatus);  // Return profile update status
     });
+
 
     // admin routes
     CROW_ROUTE(app, "/api/admin/approveUser").methods("POST"_method)([&admin](const crow::request& req) {
