@@ -1,7 +1,8 @@
-#pragma once
+#ifndef USER_H
+#define USER_H
+
 #include "Database.h"
 #include <string>
-#include <crow_all.h>
 
 namespace std {
 
@@ -10,10 +11,13 @@ private:
     Database* db;
 
 public:
-    User(Database* database);
-    crow::json::wvalue login(const std::string& email, const std::string& password);
-    crow::json::wvalue registerUser(const std::string& name, const std::string& email, const std::string& password);
-    crow::json::wvalue updateProfile(int userID, const std::string& name, const std::string& email);
+    User(Database* db);
+
+    std::string login(const std::string& email, const std::string& password);
+    std::string registerUser(const std::string& name, const std::string& email, const std::string& password);
+    std::string updateProfile(int userID, const std::string& name, const std::string& email);
 };
 
 }
+
+#endif
