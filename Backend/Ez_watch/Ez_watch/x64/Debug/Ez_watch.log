@@ -1,0 +1,8 @@
+﻿  Ez_watch.cpp
+C:\Users\nmile\source\repos\Ez_watch\Ez_watch\Ez_watch.cpp(93,30): warning C4566: character represented by universal-character-name '\u274C' cannot be represented in the current code page (1252)
+C:\Users\nmile\source\repos\Ez_watch\Ez_watch\Ez_watch.cpp(97,26): warning C4566: character represented by universal-character-name '\u2705' cannot be represented in the current code page (1252)
+C:\Users\nmile\source\repos\Ez_watch\Ez_watch\Ez_watch.cpp(100,26): warning C4566: character represented by universal-character-name '\u274C' cannot be represented in the current code page (1252)
+C:\Users\nmile\source\repos\Ez_watch\Ez_watch\Ez_watch.cpp(109,22): warning C4566: character represented by universal-character-name '\u274C' cannot be represented in the current code page (1252)
+  Ez_watch.vcxproj -> C:\Users\nmile\source\repos\Ez_watch\x64\Debug\Ez_watch.exe
+  'pwsh.exe' is not recognized as an internal or external command,
+  operable program or batch file.
