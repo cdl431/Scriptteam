@@ -1,2 +1,12 @@
 .vs/
 ~$*.docx
+
+# Ignore build artifacts
+**/x64/
+*.obj
+*.pdb
+*.ilk
+*.exe
+*.log
+*.tlog
+*.vcxproj.user
