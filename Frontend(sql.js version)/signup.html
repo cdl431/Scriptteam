@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login & Sign Up - EZ-Watch</title>
+  <link rel="stylesheet" href="styles.css" />
+
+  <script src="C:\Users\fletc\Frontend\sql-wasm.js"></script>
+</head>
+<body>
+
+
+  <div class="main">
+    <header class="topbar">
+      <div class="branding">
+        <div class="page-title">
+          <div class="title-main">EZ-Watch</div>
+          <div class="subtitle">Peer-to-peer luxury, one tick at a time ⌚</div>
+        </div>
+      </div>
+  
+      <div class="auth-buttons">
+        <a href="login.html" class="auth-btn">Log In</a>
+        <a href="HomePage.html" class="auth-btn">Guest</a>
+      </div>
+    </header>
+
+<!-- Sign Up Form -->
+<div class="login-page">
+  <div class="form-container">
+    <div class="signup-form form">
+      <h2>Sign Up for EZ-Watch</h2>
+      <form id="signup-form">
+        <input type="text" placeholder="First Name" name="firstName" id="firstName" required />
+        <input type="text" placeholder="Last Name" name="lastName" id="lastName" required />
+        <input type="text" placeholder="Username" name="username" id="username" required />
+        <input type="email" placeholder="Email" name="email" id="email" required />
+        <input type="password" placeholder="Password" name="password" id="password" required />
+      </div>
+        <select name="role" id="role" required>
+          <option value="" disabled selected>Select Role</option>
+          <option value="Buyer">Buyer</option>
+          <option value="Seller">Seller</option>
+        </select>
+
+        <input type="submit" value="Sign Up" />
+        <p id="error-message" style="color:red; display:none;">Please fill out all fields.</p>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+  <footer>
+    <p>&copy; 2025 EZ-Watch.</p>
+  </footer>
+
+
+  <!-- JavaScript -->
+  <script src="Javascript/auth.js"></script>
+</body>
+</html>

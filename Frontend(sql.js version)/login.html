@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login & Sign Up - EZ-Watch</title>
+  <link rel="stylesheet" href="styles.css" />
+
+  <script src="C:\Users\fletc\Frontend\sql-wasm.js"></script>
+</head>
+<body>
+    
+  <div class="main">
+    <header class="topbar">
+      <div class="branding">
+        <div class="page-title">
+          <div class="title-main">EZ-Watch</div>
+          <div class="subtitle">Peer-to-peer luxury, one tick at a time ⌚</div>
+        </div>
+      </div>
+  
+      <div class="auth-buttons">
+        <a href="signup.html" class="auth-btn">Sign Up</a>
+        <a href="HomePage.html" class="auth-btn">Guest</a>
+      </div>
+    </header>
+
+
+  <div class="login-page">
+    <div class="form-container">
+      <!-- Login Form -->
+      <div class="login-form form">
+        <form id="login-form" class="login-form">
+        <h2>Login to EZ-Watch</h2>
+          <input type="text" id="username" placeholder="Username" name="username" required />
+          <input type="password" id="password" placeholder="Password" name="password" required />
+          <div id="error message" style="display: none; color: red;">Invalid username or password.</div>
+          <input type="submit" value="Log In" />
+        </form>
+      </div>
+    </div>
+  </div>
+ 
+  <footer>
+    <p>&copy; 2025 EZ-Watch.</p>
+  </footer>
+
+
+  <script type="module" src="Javascript/auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cart | EZ-Watch</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script defer src="Javascript/cart.js"></script>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo-container">
+        <img src="Images/logo.png" alt="EZ-Watch Logo" class="logo-img" />
+      </div>
+      <ul class="nav-links">
+        <li><a href="HomePage.html">Home</a></li>
+        <li><a href="shopping.html">Shop</a></li>
+        <li><a href="account.html">Account</a></li>
+        <li><a href="cart.html">Cart</a></li>
+      </ul>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="page-title">
+          <div class="title-main">Your Cart</div>
+          <div class="subtitle">Review and manage your selected items.</div>
+        </div>
+        <div class="auth-buttons">
+          <a href="login.html" class="auth-btn">Log In</a>
+          <a href="signup.html" class="auth-btn">Sign Up</a>
+        </div>
+      </header>
+
+      <main class="main-content">
+        <section class="cart-section">
+          <div id="cart-items" class="cart-items">
+            <!-- Backend-populated cart items will be injected here -->
+          </div>
+
+          <div class="cart-summary">
+            <p id="cart-total">Total: $<span>0.00</span></p>
+            <button class="checkout-btn">Proceed to Checkout</button>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 EZ-Watch</p>
+  </footer>
+</body>
+</html>

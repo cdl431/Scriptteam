@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>My Account - EZ-Watch</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo-container">
+        <img src="images/logo.png" alt="EZ-Watch Logo" class="logo-img" />
+      </div>
+      <ul class="nav-links">
+        <li><a href="HomePage.html">Home</a></li>
+        <li><a href="shopping.html">Shop</a></li>
+        <li><a href="account.html">Account</a></li>
+        <li><a href="cart.html">Cart</a></li>
+      </ul>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="page-title">
+          <div class="title-main">My Account</div>
+          <div class="subtitle">Manage your EZ-Watch profile.</div>
+        </div>
+        <div class="auth-buttons">
+          <a href="login.html" class="auth-btn">Log In</a>
+          <a href="signup.html" class="auth-btn">Sign Up</a>
+        </div>
+      </header>
+
+      <main class="main-content">
+        <section class="account-section">
+          <div class="account-info">
+            <h2>Welcome, [Username]</h2>
+            <p>Email: user@example.com</p>
+          </div>
+
+          <div class="account-actions">
+            <a href="#" id="edit-profile-btn" class="account-btn edit">Edit Profile</a>
+            <a href="#" id="logout-btn" class="account-btn">Log Out</a>
+            <a href="add-product.html" class="account-btn">Add Product</a>
+            <a href="edit-product.html" class="account-btn">Edit Product</a>
+          </div>
+
+          <form id="editProfileForm" class="edit-profile-form" style="display: none;">
+            <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" id="username" name="username" required />
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" name="email" required />
+            </div>
+
+            <div class="form-buttons">
+              <button type="submit" class="account-btn">Save</button>
+              <button type="button" id="cancelEditBtn" class="account-btn">Cancel</button>
+            </div>
+          </form>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 EZ-Watch.</p>
+  </footer>
+
+  <script type="module" src="Javascript/account.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EZ-Watch</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="logo-container">
+        <img src="Images/logo.png" alt="EZ-Watch Logo" class="logo-img">
+      </div>
+      <ul class="nav-links">
+        <li><a href="HomePage.html">Home</a></li>
+        <li><a href="shopping.html">Shop</a></li>
+        <li><a href="account.html">Account</a></li>
+        <li><a href="cart.html">Cart</a></li>
+      </ul>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="branding">
+          <div class="page-title">
+            <div class="title-main">Shopping</div>
+            <div class="subtitle">Browse items posted by fellow customers.</div>
+          </div>
+        </div>
+        <div class="auth-buttons">
+          <a href="login.html" class="auth-btn">Log In</a>
+          <a href="signup.html" class="auth-btn">Sign Up</a>
+        </div>
+      </header>
+
+      <div class="shopping-content">
+        <section id="search-bar">
+          <div class="bar">
+            <input type="text" id="search-input" placeholder="Search for product...">
+            <button id="search-button">Search</button>
+          </div>
+        </section>
+
+        <!-- Search Results Section -->
+        <section id="search-results" class="shopping-p1">
+          <h2>Search Results</h2>
+          <div class="pro-container" id="search-results-container"></div>
+        </section>
+
+        <!-- Featured Products Section -->
+        <section id="feature" class="shopping-p1">
+          <h1>Featured Products</h1>
+          <p>Browse to your hearts content!</p>
+          <div class="pro-container">
+            <!-- Example Products -->
+            <div class="product" data-name="Product A" data-tags="book, sci-fi">
+              <a href="product.html">
+                <img src="Images/placeholder_image.jpg" alt="placeholder">
+                <div class="description">
+                  <h5>Product A</h5>
+                  <span>Tags: sci-fi, book</span>
+                  <h4>$100</h4>
+                </div>
+                <i class="cart"></i>
+              </a>
+            </div>
+
+            <div class="product" data-name="Product B" data-tags="movie, horror">
+              <a href="product.html">
+                <img src="Images/placeholder_image.jpg" alt="placeholder">
+                <div class="description">
+                  <h5>Product B</h5>
+                  <span>Tags: horror, movie</span>
+                  <h4>$120</h4>
+                </div>
+                <i class="cart"></i>
+              </a>
+            </div>
+
+            <div class="product" data-name="Product C" data-tags="romance, book">
+              <a href="product.html">
+                <img src="Images/placeholder_image.jpg" alt="placeholder">
+                <div class="description">
+                  <h5>Product C</h5>
+                  <span>Tags: romance, book</span>
+                  <h4>$150</h4>
+                </div>
+                <i class="cart"></i>
+              </a>
+            </div>
+
+            <div class="product" data-name="Product D" data-tags="sci-fi, movie">
+              <a href="product.html">
+                <img src="Images/placeholder_image.jpg" alt="placeholder">
+                <div class="description">
+                  <h5>Product D</h5>
+                  <span>Tags: sci-fi, movie</span>
+                  <h4>$200</h4>
+                </div>
+                <i class="cart"></i>
+              </a>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <footer>
+        <p>&copy; 2025 EZ-Watch.</p>
+      </footer>
+    </div>
+  </div>
+  <!-- JavaScript -->
+  <script>
+    // Simulate a function that gets data from a C++ backend (or SQL database)
+    function fetchProductsFromBackend(searchTerm) {
+      // Mock data (this would normally come from your SQL database via C++ backend)
+      const products = [
+        { name: 'Product A', tags: ['book', 'sci-fi'], price: 100 },
+        { name: 'Product B', tags: ['movie', 'horror'], price: 120 },
+        { name: 'Product C', tags: ['romance', 'book'], price: 150 },
+        { name: 'Product D', tags: ['sci-fi', 'movie'], price: 200 },
+      ];
+
+      // Filter products based on search term (matching name or tags)
+      return products.filter(product => {
+        const lowerSearchTerm = searchTerm.toLowerCase();
+        const nameMatch = product.name.toLowerCase().includes(lowerSearchTerm);
+        const tagsMatch = product.tags.some(tag => tag.toLowerCase().includes(lowerSearchTerm));
+        return nameMatch || tagsMatch;
+      });
+    }
+
+    document.getElementById('search-button').addEventListener('click', function() {
+      // Clear previous search results
+      const searchResultsContainer = document.getElementById('search-results-container');
+      searchResultsContainer.innerHTML = '';
+
+      // Get the search term from the input
+      const searchTerm = document.getElementById('search-input').value.trim();
+
+      // Get the filtered products from the "backend" (mocked in this case)
+      const searchResults = fetchProductsFromBackend(searchTerm);
+
+      if (searchResults.length > 0) {
+        // Display the search results in the results container
+        searchResults.forEach(function(product) {
+          const productDiv = document.createElement('div');
+          productDiv.classList.add('product');
+          
+          // Creating the content for the product
+          productDiv.innerHTML = `
+            <a href="product.html">
+              <img src="Images/placeholder_image.jpg" alt="${product.name}">
+              <div class="description">
+                <h5>${product.name}</h5>
+                <span>Tags: ${product.tags.join(', ')}</span>
+                <h4>$${product.price}</h4>
+              </div>
+              <i class="cart"></i>
+            </a>
+          `;
+          
+          // Append to the results container
+          searchResultsContainer.appendChild(productDiv);
+        });
+      } else {
+        // Display a message if no results are found
+        const noResultsMessage = document.createElement('p');
+        noResultsMessage.textContent = "No products found.";
+        searchResultsContainer.appendChild(noResultsMessage);
+      }
+    });
+  </script>
+</body>
+</html>
+</body>
+</html>
