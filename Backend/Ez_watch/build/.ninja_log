@@ -1,0 +1,10 @@
+# ninja log v6
+37	3044	7674523150446180	CMakeFiles/Ez_watch.dir/src/CartManager.cpp.obj	42fdad183dfa396b
+50	3006	7674523150576527	CMakeFiles/Ez_watch.dir/src/UserManager.cpp.obj	9a05ace85e01e2d8
+41	3427	7674523150486186	CMakeFiles/Ez_watch.dir/src/DatabaseManager.cpp.obj	d76557b39a990c86
+46	2988	7674523150536519	CMakeFiles/Ez_watch.dir/src/ProductManager.cpp.obj	310679f99f4c2280
+15	5424	7674523150219963	CMakeFiles/Ez_watch.dir/src/AuthManager.cpp.obj	81bc017bdb20812d
+54	11244	7674523150621671	CMakeFiles/Ez_watch.dir/src/main.cpp.obj	4946a175f80a9112
+18	439	7674528492452794	Ez_watch.exe	d77404389f36ec32
+18	10858	7674531824046064	CMakeFiles/Ez_watch.dir/src/main.cpp.obj	4946a175f80a9112
+10868	11317	7674531932541605	Ez_watch.exe	d77404389f36ec32

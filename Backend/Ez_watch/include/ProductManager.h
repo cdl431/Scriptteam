@@ -1,11 +1,23 @@
 #pragma once
-#include "crow/include/crow.h"
 
-namespace ProductManager {
-    crow::response getProducts(const crow::request& req);
-    crow::response getProductById(const crow::request& req, int id);
-    crow::response addProduct(const crow::request& req);
-    crow::response updateProduct(const crow::request& req, int id);
-    crow::response getAdminProducts(const crow::request& req);
-    crow::response deleteProduct(const crow::request& req, int id);
-}
+#include "DatabaseManager.h"
+#include <vector>
+#include <string>
+
+struct Product {
+    int id;
+    std::string name;
+    std::string description;
+    double price;
+};
+
+class ProductManager {
+private:
+    DatabaseManager& db;
+
+public:
+    ProductManager(DatabaseManager& dbManager);
+
+    bool addProduct(const Product& product);
+    std::vector<Product> getAllProducts() const;
+};

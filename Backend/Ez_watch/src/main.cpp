@@ -1,65 +1,63 @@
-#include "crow/include/crow.h"
+#include "crow.h"
+#include "DatabaseManager.h"
+#include "AuthManager.h"
+#include "UserManager.h"
 #include "ProductManager.h"
 #include "CartManager.h"
-#include "UserManager.h"
-#include "AuthManager.h"
 
-int main()
-{
+int main() {
     crow::SimpleApp app;
 
-    // Test root
-    CROW_ROUTE(app, "/")([]() {
-        return "Ez_watch backend is up and running!";
+    // Connect to database
+    DatabaseManager db("data.json");
+
+    // Managers
+    AuthManager authManager(db);
+    UserManager userManager(db);
+    ProductManager productManager(db);
+    CartManager cartManager(db);
+
+    // Routes!
+
+    CROW_ROUTE(app, "/api/test")
+    ([]() {
+        return crow::response(200, "Backend is working!");
     });
 
-    // Homepage + Product Listing
-    CROW_ROUTE(app, "/api/products")
-    .methods("GET"_method)(ProductManager::getProducts);
+    CROW_ROUTE(app, "/api/signup").methods("POST"_method)
+    ([&](const crow::request& req) {
+        auto body = crow::json::load(req.body);
+        if (!body) {
+            return crow::response(400, "Invalid JSON");
+        }
 
-    CROW_ROUTE(app, "/api/products/<string>")
-    .methods("GET"_method)(ProductManager::getProductById);
+        std::string username = body["username"].s();
+        std::string email = body["email"].s();
+        std::string password = body["password"].s();
 
-    // Add/Edit Product
-    CROW_ROUTE(app, "/api/products")
-    .methods("POST"_method)(ProductManager::addProduct);
+        if (userManager.registerUser(username, email, password)) {
+            return crow::response(201, "User registered successfully.");
+        } else {
+            return crow::response(409, "User already exists.");
+        }
+    });
 
-    CROW_ROUTE(app, "/api/products/<string>")
-    .methods("PUT"_method)(ProductManager::updateProduct);
+    CROW_ROUTE(app, "/api/login").methods("POST"_method)
+    ([&](const crow::request& req) {
+        auto body = crow::json::load(req.body);
+        if (!body) {
+            return crow::response(400, "Invalid JSON");
+        }
 
-    // Admin Controls
-    CROW_ROUTE(app, "/api/admin/products")
-    .methods("GET"_method)(ProductManager::getAdminProducts);
+        std::string email = body["email"].s();
+        std::string password = body["password"].s();
 
-    CROW_ROUTE(app, "/api/products/<string>")
-    .methods("DELETE"_method)(ProductManager::deleteProduct);
+        if (authManager.login(email, password)) {
+            return crow::response(200, "Login successful.");
+        } else {
+            return crow::response(401, "Invalid credentials.");
+        }
+    });
 
-    // Cart
-    CROW_ROUTE(app, "/api/cart/<string>")
-    .methods("GET"_method)(CartManager::getCart);
-
-    CROW_ROUTE(app, "/api/cart/add")
-    .methods("POST"_method)(CartManager::addToCart);
-
-    CROW_ROUTE(app, "/api/cart/remove")
-    .methods("POST"_method)(CartManager::removeFromCart);
-
-    // Auth
-    CROW_ROUTE(app, "/api/auth/login")
-    .methods("POST"_method)(AuthManager::login);
-
-    CROW_ROUTE(app, "/api/auth/signup")
-    .methods("POST"_method)(AuthManager::signup);
-
-    CROW_ROUTE(app, "/api/auth/logout")
-    .methods("POST"_method)(AuthManager::logout);
-
-    // Account
-    CROW_ROUTE(app, "/api/user/<string>")
-    .methods("GET"_method)(UserManager::getUserProfile);
-
-    CROW_ROUTE(app, "/api/user/<string>")
-    .methods("PUT"_method)(UserManager::updateUserProfile);
-
-    app.port(18080).multithreaded().run();
+    app.port(52520).multithreaded().run();
 }

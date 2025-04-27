@@ -1,28 +1,39 @@
 #include "UserManager.h"
-#include "../storage/database.h"
-#include "json.hpp"
+#include <nlohmann/json.hpp>
 
-using json = nlohmann::json;
+UserManager::UserManager(DatabaseManager& dbManager) : db(dbManager) {}
 
-namespace UserManager {
+bool UserManager::registerUser(const std::string& username, const std::string& email, const std::string& password) {
+    auto data = db.readJson();
+    int newId = data["users"].size() + 1;
 
-    crow::response getUserProfile(const crow::request& req, const std::string& userId) {
-        json users = database::readAll("users");
-        for (const auto& user : users) {
-            if (user["id"] == userId) {
-                return crow::response(200, user.dump());
-            }
+    for (const auto& user : data["users"]) {
+        if (user["email"] == email) {
+            return false; // Email already exists
         }
-        return crow::response(404, "User not found");
     }
 
-    crow::response updateUserProfile(const crow::request& req, const std::string& userId) {
-        json newData = json::parse(req.body);
-        bool updated = database::edit("users", userId, newData);
-        if (updated)
-            return crow::response(200, "User updated");
-        else
-            return crow::response(404, "User not found");
-    }
+    data["users"].push_back({
+        {"id", newId},
+        {"username", username},
+        {"email", email},
+        {"password", password}
+    });
 
+    db.writeJson(data);
+    return true;
+}
+
+std::vector<User> UserManager::getAllUsers() const {
+    auto data = db.readJson();
+    std::vector<User> users;
+    for (const auto& item : data["users"]) {
+        users.push_back({
+            item["id"],
+            item["username"],
+            item["email"],
+            item["password"]
+        });
+    }
+    return users;
 }
