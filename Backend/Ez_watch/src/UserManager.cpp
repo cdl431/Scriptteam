@@ -1,39 +1,39 @@
 #include "UserManager.h"
-#include <nlohmann/json.hpp>
+#include "DatabaseManager.h"
 
-UserManager::UserManager(DatabaseManager& dbManager) : db(dbManager) {}
+#include <memory>
+#include <stdexcept>
 
-bool UserManager::registerUser(const std::string& username, const std::string& email, const std::string& password) {
-    auto data = db.readJson();
-    int newId = data["users"].size() + 1;
+using sql::PreparedStatement;
+using sql::ResultSet;
 
-    for (const auto& user : data["users"]) {
-        if (user["email"] == email) {
-            return false; // Email already exists
-        }
+UserManager::UserManager(DatabaseManager& db) : db_(db) {}
+
+
+bool UserManager::registerUser(const std::string& username,
+                               const std::string& email,
+                               const std::string& password)
+{
+    auto conn = db_.connection();                
+
+    {
+        std::unique_ptr<PreparedStatement> stmt(
+            conn->prepareStatement(
+                "SELECT id FROM users WHERE username = ? OR email = ? LIMIT 1"));
+        stmt->setString(1, username);
+        stmt->setString(2, email);
+
+        std::unique_ptr<ResultSet> rs(stmt->executeQuery());
+        if (rs->next()) return false;            
     }
 
-    data["users"].push_back({
-        {"id", newId},
-        {"username", username},
-        {"email", email},
-        {"password", password}
-    });
+    std::unique_ptr<PreparedStatement> stmt(
+        conn->prepareStatement(
+            "INSERT INTO users(username,email,password) VALUES(?,?,?)"));
+    stmt->setString(1, username);
+    stmt->setString(2, email);
+    stmt->setString(3, password);               
+    stmt->execute();
 
-    db.writeJson(data);
     return true;
-}
-
-std::vector<User> UserManager::getAllUsers() const {
-    auto data = db.readJson();
-    std::vector<User> users;
-    for (const auto& item : data["users"]) {
-        users.push_back({
-            item["id"],
-            item["username"],
-            item["email"],
-            item["password"]
-        });
-    }
-    return users;
 }

@@ -12,8 +12,7 @@ bool UserManager::registerUser(const std::string& username, const std::string& e
     json data = db.readJson();
     for (const auto& user : data["users"]) {
         if (user["email"] == email) {
-            return false; // user already exists
-        }
+            return false; 
     }
     json newUser = {
         {"id", static_cast<int>(data["users"].size()) + 1},

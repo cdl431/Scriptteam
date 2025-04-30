@@ -1,22 +1,23 @@
-cmake_minimum_required(VERSION 3.10)
-project(Ez_watch)
+cmake_minimum_required(VERSION 3.16)
+project(Ez_watch LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+set(MYSQL_CONCPP_DIR "C:/Program Files/MySQL/mysql-connector-c++-9.3.0-winx64")
 
 include_directories(
     ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/include/crow
-    ${CMAKE_SOURCE_DIR}/include/vcpkg/installed/x64-windows/include
-    ${CMAKE_SOURCE_DIR}/handlers
-    ${CMAKE_SOURCE_DIR}/middleware
-    ${CMAKE_SOURCE_DIR}/storage
+    "${MYSQL_CONCPP_DIR}/include"
 )
 
-file(GLOB SOURCES
-    src/*.cpp
-    storage/*.cpp
+link_directories("${MYSQL_CONCPP_DIR}/lib64/vs14")
+
+add_executable(connection_test
+    src/connection_test.cpp
+    src/DatabaseManager.cpp
 )
 
-add_executable(Ez_watch ${SOURCES})
-
-target_link_libraries(Ez_watch PRIVATE ws2_32 mswsock)
+target_link_libraries(connection_test
+    PRIVATE ws2_32 mswsock mysqlcppconn
+)

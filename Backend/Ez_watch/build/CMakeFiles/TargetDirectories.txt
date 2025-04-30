@@ -1,3 +1,3 @@
-C:/Users/Thomas Nguyen/Documents/Github/scriptteam/Backend/Ez_watch/build/CMakeFiles/Ez_watch.dir
-C:/Users/Thomas Nguyen/Documents/Github/scriptteam/Backend/Ez_watch/build/CMakeFiles/edit_cache.dir
-C:/Users/Thomas Nguyen/Documents/Github/scriptteam/Backend/Ez_watch/build/CMakeFiles/rebuild_cache.dir
+C:/Users/Thomas Nguyen/Documents/GitHub/Scriptteam/Backend/Ez_watch/build/CMakeFiles/connection_test.dir
+C:/Users/Thomas Nguyen/Documents/GitHub/Scriptteam/Backend/Ez_watch/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/Thomas Nguyen/Documents/GitHub/Scriptteam/Backend/Ez_watch/build/CMakeFiles/ZERO_CHECK.dir

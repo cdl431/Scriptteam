@@ -1,14 +1,21 @@
 #pragma once
 
-#include <nlohmann/json.hpp>
+#include <memory>
 #include <string>
 
-class DatabaseManager {
-private:
-    std::string filePath;
+#include <jdbc/cppconn/driver.h>
+#include <jdbc/cppconn/connection.h>
 
+class DatabaseManager {
 public:
-    DatabaseManager(const std::string& path);
-    nlohmann::json readJson() const;
-    void writeJson(const nlohmann::json& data) const;
+    DatabaseManager(const std::string& host   = "tcp://127.0.0.1:3306",
+                    const std::string& user   = "root",
+                    const std::string& passwd = "Jdtxb9873",
+                    const std::string& schema = "ez_watch");
+
+    std::shared_ptr<sql::Connection> connection() { return conn_; }
+
+private:
+    sql::Driver*                    driver_{nullptr};
+    std::shared_ptr<sql::Connection> conn_;
 };

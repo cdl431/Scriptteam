@@ -1,23 +1,25 @@
 #pragma once
-
-#include "DatabaseManager.h"
 #include <vector>
 #include <string>
 
 struct User {
-    int id;
+    int         id;
     std::string username;
     std::string email;
-    std::string password;
+    std::string password;       // unhashed for brevity – *hash in prod!*
 };
 
+class DatabaseManager;
+
 class UserManager {
-private:
-    DatabaseManager& db;
-
 public:
-    UserManager(DatabaseManager& dbManager);
+    explicit UserManager(DatabaseManager& db);
 
-    bool registerUser(const std::string& username, const std::string& email, const std::string& password);
-    std::vector<User> getAllUsers() const;
+    bool           addUser(const std::string& username,
+                           const std::string& email,
+                           const std::string& password);
+
+    std::vector<User> getAllUsers();
+private:
+    DatabaseManager& db_;
 };

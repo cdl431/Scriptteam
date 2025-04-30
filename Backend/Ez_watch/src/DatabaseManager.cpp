@@ -1,20 +1,14 @@
 #include "DatabaseManager.h"
-#include <fstream>
+#include <jdbc/mysql_driver.h>         
+#include <jdbc/cppconn/statement.h>
 
-DatabaseManager::DatabaseManager(const std::string& path) : filePath(path) {}
+DatabaseManager::DatabaseManager(const std::string& host,
+                                 const std::string& user,
+                                 const std::string& passwd,
+                                 const std::string& schema)
+{
+    driver_ = get_driver_instance();
 
-nlohmann::json DatabaseManager::readJson() const {
-    std::ifstream file(filePath);
-    nlohmann::json data;
-    if (file.is_open()) {
-        file >> data;
-    }
-    return data;
-}
-
-void DatabaseManager::writeJson(const nlohmann::json& data) const {
-    std::ofstream file(filePath);
-    if (file.is_open()) {
-        file << data.dump(4);
-    }
+    conn_.reset(driver_->connect(host, user, passwd));
+    conn_->setSchema(schema);
 }
