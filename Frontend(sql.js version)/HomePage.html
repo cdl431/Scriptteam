@@ -21,17 +21,21 @@
     </aside>
 
     <div class="main">
-      <header class="topbar">
+      <header class="topbar" style="display: flex; justify-content: space-between; align-items: center;">
         <div class="branding">
           <div class="page-title">
             <div class="title-main">Welcome to EZ-Watch</div>
             <div class="subtitle">Peer-to-peer luxury, one tick at a time ⌚</div>
           </div>
         </div>
-    
-        <div class="auth-buttons">
-          <a href="login.html" class="auth-btn">Log In</a>
-          <a href="signup.html" class="auth-btn">Sign Up</a>
+
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <div class="auth-buttons" id="auth-buttons">
+            <a href="login.html" class="auth-btn">Log In</a>
+            <a href="signup.html" class="auth-btn">Sign Up</a>
+          </div>
+          <div id="user-greeting" class="title-main" style="color: white; font-size: 20px;"></div>
+          <a href="login.html" class="auth-btn">Log Out</a>
         </div>
       </header>
 
@@ -50,5 +54,27 @@
       </footer>
     </div>
   </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const userData = localStorage.getItem("user");
+      const user = userData ? JSON.parse(userData) : null;
+
+      const greetingEl = document.getElementById("user-greeting");
+      const authButtons = document.getElementById("auth-buttons");
+      const logoutBtn = document.getElementById("logout-btn");
+
+      if (user && user.firstName) {
+        greetingEl.textContent = `Welcome, ${user.firstName}!`;
+        if (authButtons) authButtons.style.display = "none";
+        if (logoutBtn) logoutBtn.style.display = "inline-block";
+
+        logoutBtn.addEventListener("click", () => {
+          localStorage.removeItem("user");
+          window.location.href = "login.html";
+        });
+      }
+    });
+  </script>
 </body>
 </html>
