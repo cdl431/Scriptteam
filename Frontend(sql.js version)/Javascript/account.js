@@ -1,69 +1,125 @@
-import { logoutUser } from "./auth.js";
-import { isUserLoggedIn, getCurrentUser } from "./auth.js";
+let db;
 
-document.addEventListener("DOMContentLoaded", () => {
-  // Simulated user object until backend has data
-  const mockUser = {
-    name: "random guy",
-    email: "randomguy@example.com"
-  };
+document.addEventListener("DOMContentLoaded", async () => {
+  // 1. Load the SQL engine
+  const SQL = await initSqlJs({ locateFile: file => `Javascript/${file}` });
 
-  if (!localStorage.getItem("user")) {
-    localStorage.setItem("user", JSON.stringify(mockUser));
+  // 2. Load or create the database
+  if (localStorage.getItem("userDatabase")) {
+    const savedDb = Uint8Array.from(JSON.parse(localStorage.getItem("userDatabase")));
+    db = new SQL.Database(savedDb);
+  } else {
+    db = new SQL.Database(); // Just create an empty one (not adding a table)
+    saveDatabase();
   }
 
-  const user = JSON.parse(localStorage.getItem("user"));
-  const welcomeText = document.querySelector(".account-section h2");
-  const emailText = document.querySelector(".account-section p");
+  // 3. Now run your existing page logic
+  setupPage();
+});
 
-  if (user && welcomeText && emailText) {
-    welcomeText.textContent = `Welcome, ${user.name}`;
-    emailText.textContent = `Email: ${user.email}`;
+function saveDatabase() {
+  const data = db.export();
+  localStorage.setItem("userDatabase", JSON.stringify(Array.from(data)));
+}
+
+function setupPage() {
+  const userData = localStorage.getItem("user");
+  const user = userData ? JSON.parse(userData) : null;
+
+  const greeting = document.getElementById("greeting");
+  const logoutBtn = document.getElementById("logout-btn");
+
+  const usernameSpan = document.getElementById("userUsername");
+  const emailSpan = document.getElementById("userEmail");
+
+  const usernameInput = document.getElementById("username");
+  const emailInput = document.getElementById("email");
+  const phoneInput = document.getElementById("phone");
+  const passwordInput = document.getElementById("password");
+
+  if (user) {
+    greeting.textContent = `Welcome, ${user.firstName}!`;
+    usernameSpan.textContent = user.username;
+    emailSpan.textContent = user.email;
+
+    if (usernameInput) usernameInput.value = user.username;
+    if (emailInput) emailInput.value = user.email;
+    if (phoneInput) phoneInput.value = user.phone || "";
+    if (passwordInput) passwordInput.value = user.password || "";
+  } else {
+    greeting.textContent = "Welcome, Guest";
+    usernameSpan.textContent = "[Not logged in]";
+    emailSpan.textContent = "[No email]";
   }
 
-  const logoutBtn = document.querySelector(".account-btn.logout");
   if (logoutBtn) {
-    logoutBtn.addEventListener("click", logoutUser);
-  }
-
-  const editBtn = document.getElementById("edit-profile-btn");
-  const editForm = document.getElementById("editProfileForm");
-  const cancelEditBtn = document.getElementById("cancelEditBtn");
-
-  if (editBtn && editForm) {
-    editBtn.addEventListener("click", () => {
-      editForm.style.display = "block";
-      document.getElementById("username").value = user.name;
-      document.getElementById("email").value = user.email;
+    logoutBtn.addEventListener("click", () => {
+      localStorage.removeItem("user");
+      window.location.href = "login.html";
     });
   }
 
+  const editProfileBtn = document.getElementById("edit-profile-btn");
+  if (editProfileBtn) {
+    editProfileBtn.addEventListener("click", () => {
+      document.getElementById("editProfileForm").style.display = "block";
+    });
+  }
+
+  const cancelEditBtn = document.getElementById("cancelEditBtn");
   if (cancelEditBtn) {
     cancelEditBtn.addEventListener("click", () => {
-      editForm.style.display = "none";
+      document.getElementById("editProfileForm").style.display = "none";
     });
   }
 
+  const editForm = document.getElementById("editProfileForm");
   if (editForm) {
     editForm.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const newName = document.getElementById("username").value.trim();
-      const newEmail = document.getElementById("email").value.trim();
+      e.preventDefault(); // Prevent form reload
 
-      if (!newName || !newEmail) {
-        alert("Please fill out all fields.");
-        return;
-      }
+      console.log("Form submitted!");
 
-      const updatedUser = { name: newName, email: newEmail };
+      if (!user) return;
+
+      const originalUsername = user.username;
+
+      const updatedUser = {
+        ...user,
+        username: usernameInput.value,
+        email: emailInput.value,
+        phone: phoneInput.value,
+        password: passwordInput.value
+      };
+
+      // Update localStorage
       localStorage.setItem("user", JSON.stringify(updatedUser));
 
-      // Update the UI
-      if (welcomeText) welcomeText.textContent = `Welcome, ${newName}`;
-      if (emailText) emailText.textContent = `Email: ${newEmail}`;
-      editForm.style.display = "none";
+      // Update SQLite
+      const updateStmt = db.prepare(`
+        UPDATE users
+        SET username = ?, email = ?, phone = ?, password = ?
+        WHERE username = ?
+      `);
+      updateStmt.bind([
+        updatedUser.username,
+        updatedUser.email,
+        updatedUser.phone,
+        updatedUser.password,
+        originalUsername
+      ]);
+      updateStmt.step();
+      updateStmt.free();
+      saveDatabase();
 
-      alert("Profile updated!");
+      // Update page
+      usernameSpan.textContent = updatedUser.username;
+      emailSpan.textContent = updatedUser.email;
+
+      document.getElementById("editProfileForm").style.display = "none";
+
+      alert("Profile updated successfully!");
     });
   }
-});
+}
+
