@@ -1,12 +1,21 @@
 let db;
 
-// Initialize the database only after SQL.js is fully loaded
-function initDatabase() {
-  if (window.SQL) {
-    const SQL = window.SQL;
-    db = new SQL.Database();
+// Load and initialize sql.js before anything else
+initSqlJs({
+  locateFile: file => `Javascript/${file}`
+}).then(SQLLib => {
+  window.SQL = SQLLib;
+  initDatabase();
+});
 
-    // Create users table if it doesn't exist
+function initDatabase() {
+  if (localStorage.getItem("userDatabase")) {
+    console.log("Loading saved database from localStorage...");
+    const savedDb = Uint8Array.from(JSON.parse(localStorage.getItem("userDatabase")));
+    db = new SQL.Database(savedDb);
+  } else {
+    console.log("No saved database. Creating a new one...");
+    db = new SQL.Database();
     const createTableQuery = `
       CREATE TABLE IF NOT EXISTS users (
         userID INTEGER PRIMARY KEY,
@@ -20,17 +29,18 @@ function initDatabase() {
       );
     `;
     db.run(createTableQuery);
-  } else {
-    console.error("SQL.js is not loaded properly.");
+    saveDatabase();
   }
 }
 
-// Initialize database
-initDatabase();
+function saveDatabase() {
+  const binaryArray = db.export();
+  localStorage.setItem("userDatabase", JSON.stringify(Array.from(binaryArray)));
+}
 
-// Utility function to save user data into localStorage (mock login)
 function loginUser(userData) {
-  localStorage.setItem("user", JSON.stringify(userData));
+  const { password, ...userWithoutPassword } = userData;
+  localStorage.setItem("user", JSON.stringify(userWithoutPassword));
 }
 
 function logoutUser() {
@@ -48,34 +58,21 @@ function getCurrentUser() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const loginForm = document.getElementById("login-form");
-  if (loginForm) {
-    loginForm.addEventListener("submit", (event) => {
-      event.preventDefault();
-
-      const username = document.getElementById('username').value;
-      const password = document.getElementById('password').value;
-
-      // Call the login function
-      loginRequest(username, password);
-    });
-  }
-
   const signupForm = document.getElementById("signup-form");
+
   if (signupForm) {
     signupForm.addEventListener("submit", function(event) {
       event.preventDefault();
 
-      const firstName = document.getElementById('firstName').value;
-      const lastName = document.getElementById('lastName').value;
-      const username = document.getElementById('username').value;
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const phone = document.getElementById('phone').value;
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const username = document.getElementById('username').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const phone = document.getElementById('phone') ? document.getElementById('phone').value.trim() : "";
       const role = document.getElementById('role').value;
 
-      if (firstName && lastName && username && email && password && phone && role) {
-        // Proceed to insert the new user into the database
+      if (firstName && lastName && username && email && password && role) {
         signupRequest(firstName, lastName, username, email, password, phone, role);
       } else {
         document.getElementById('error-message').style.display = 'block';
@@ -84,46 +81,20 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// Function to handle login request
-function loginRequest(username, password) {
-  // Query the database to find the user by username and password
-  const query = `SELECT * FROM users WHERE username = ? AND password = ?`;
-  const stmt = db.prepare(query);
-  stmt.bind([username, password]);
-
-  let user = null;
-  while (stmt.step()) {
-    user = stmt.getAsObject();
-  }
-  stmt.free();
-
-  if (user) {
-    alert('Login successful!');
-    loginUser(user); // Store the user info
-    window.location.href = 'HomePage.html';
-  } else {
-    alert('Invalid username or password.');
-    document.getElementById('error-message').style.display = 'block';
-  }
-}
-
-// Function to handle signup request
 function signupRequest(firstName, lastName, username, email, password, phone, role) {
-  // Check if the username or email already exists
   const checkUserQuery = `SELECT * FROM users WHERE username = ? OR email = ?`;
   const checkStmt = db.prepare(checkUserQuery);
   checkStmt.bind([username, email]);
 
-  let existingUser = null;
+  let exists = false;
   while (checkStmt.step()) {
-    existingUser = checkStmt.getAsObject();
+    exists = true;
   }
   checkStmt.free();
 
-  if (existingUser) {
+  if (exists) {
     alert('Username or email already in use.');
   } else {
-    // Insert new user data into the database
     const insertQuery = `
       INSERT INTO users (firstName, lastName, username, email, password, phone, role)
       VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -133,12 +104,47 @@ function signupRequest(firstName, lastName, username, email, password, phone, ro
     insertStmt.step();
     insertStmt.free();
 
-    // Save DB to localStorage
-    const binaryArray = db.export();
-    const base64Db = btoa(String.fromCharCode(...binaryArray));
-    localStorage.setItem("userDatabase", base64Db);
+    saveDatabase();
+    document.getElementById("signup-form").reset();
 
-    alert('Sign up successful!');
-    window.location.href = 'login.html'; // Redirect to login after successful signup
+    loginUser({ firstName, lastName, username, email, password, phone, role });
+    window.location.href = "HomePage.html";
   }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const showBtn = document.getElementById("show-users");
+
+  if (showBtn) {
+    showBtn.addEventListener("click", () => {
+      const savedDb = localStorage.getItem("userDatabase");
+      if (!savedDb) {
+        alert("No database found.");
+        return;
+      }
+
+      const db = new SQL.Database(Uint8Array.from(JSON.parse(savedDb)));
+      const result = db.exec("SELECT * FROM users");
+
+      if (result.length === 0) {
+        console.log("No users found.");
+      } else {
+        const columns = result[0].columns;
+        const rows = result[0].values;
+
+        const users = rows.map(row => {
+          const userObj = {};
+          row.forEach((val, index) => {
+            userObj[columns[index]] = val;
+          });
+          return userObj;
+        });
+
+        console.table(users);
+        alert("Check DevTools console for the user list.");
+      }
+    });
+  }
+});
+
+export { loginUser, logoutUser, isUserLoggedIn, getCurrentUser, saveDatabase, db };
