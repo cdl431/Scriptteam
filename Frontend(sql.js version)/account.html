@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DO<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -21,27 +21,27 @@
     </aside>
 
     <div class="main">
-      <header class="topbar">
+      <header class="topbar" style="display: flex; justify-content: space-between; align-items: center;">
         <div class="page-title">
           <div class="title-main">My Account</div>
           <div class="subtitle">Manage your EZ-Watch profile.</div>
         </div>
-        <div class="auth-buttons">
-          <a href="login.html" class="auth-btn">Log In</a>
-          <a href="signup.html" class="auth-btn">Sign Up</a>
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div id="greeting" class="title-main" style="color: white;"></div>
+
+          <a href="login.html" class="auth-btn" id="logout-btn">Log Out</a>
         </div>
       </header>
 
       <main class="main-content">
         <section class="account-section">
           <div class="account-info">
-            <h2>Welcome, [Username]</h2>
-            <p>Email: user@example.com</p>
+            <p style="font-size: 18px;"><strong>Username:</strong> <span id="userUsername">[Username]</span></p>
+            <p style="font-size: 18px;"><strong>Email:</strong> <span id="userEmail">user@example.com</span></p>
           </div>
 
           <div class="account-actions">
             <a href="#" id="edit-profile-btn" class="account-btn edit">Edit Profile</a>
-            <a href="#" id="logout-btn" class="account-btn">Log Out</a>
             <a href="add-product.html" class="account-btn">Add Product</a>
             <a href="edit-product.html" class="account-btn">Edit Product</a>
           </div>
@@ -55,6 +55,16 @@
             <div class="form-group">
               <label for="email">Email</label>
               <input type="email" id="email" name="email" required />
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" name="phone" required />
+            </div>
+
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" required />
             </div>
 
             <div class="form-buttons">
@@ -71,7 +81,7 @@
     <p>&copy; 2025 EZ-Watch.</p>
   </footer>
 
-  <script type="module" src="Javascript/account.js"></script>
-
+  <script src="Javascript/account.js"></script>
+  <script src="Javascript/sql-wasm.js"></script>
 </body>
 </html>
