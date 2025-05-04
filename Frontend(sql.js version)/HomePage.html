@@ -35,7 +35,7 @@
             <a href="signup.html" class="auth-btn">Sign Up</a>
           </div>
           <div id="user-greeting" class="title-main" style="color: white; font-size: 20px;"></div>
-          <a href="login.html" class="auth-btn">Log Out</a>
+          <a href="login.html" class="auth-btn" id="logout-btn">Log Out</a>
         </div>
       </header>
 
@@ -59,22 +59,35 @@
     document.addEventListener("DOMContentLoaded", () => {
       const userData = localStorage.getItem("user");
       const user = userData ? JSON.parse(userData) : null;
-
+  
       const greetingEl = document.getElementById("user-greeting");
       const authButtons = document.getElementById("auth-buttons");
-      const logoutBtn = document.getElementById("logout-btn");
+      const logoutLink = document.getElementById("logout-btn");
 
+      const accountLink = document.querySelector('a[href="account.html"]');
+  
       if (user && user.firstName) {
         greetingEl.textContent = `Welcome, ${user.firstName}!`;
         if (authButtons) authButtons.style.display = "none";
-        if (logoutBtn) logoutBtn.style.display = "inline-block";
-
-        logoutBtn.addEventListener("click", () => {
-          localStorage.removeItem("user");
-          window.location.href = "login.html";
-        });
+  
+        if (user.role === "Guest") {
+          if (accountLink) accountLink.style.display = "none";
+          if (logoutLink) logoutLink.textContent = "Log In";
+          logoutLink.addEventListener("click", () => {
+            localStorage.removeItem("user");
+          });
+        } else {
+          if (logoutLink) {
+            logoutLink.textContent = "Log Out";
+            logoutLink.addEventListener("click", (e) => {
+              e.preventDefault();
+              localStorage.removeItem("user");
+              window.location.href = "login.html";
+            });
+          }
+        }
       }
     });
-  </script>
+  </script>  
 </body>
 </html>
