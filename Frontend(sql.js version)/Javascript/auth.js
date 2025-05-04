@@ -152,3 +152,30 @@ function setupShowUsersHandler() {
     }
   });
 }
+
+function loginAsGuest() {
+  const guestUser = {
+    firstName: 'Guest',
+    lastName: '',
+    username: 'guest_user',
+    email: '',
+    password: '',
+    phone: '',
+    role: 'Guest'
+  };
+
+  localStorage.setItem("user", JSON.stringify(guestUser));
+
+  window.location.href = "HomePage.html";
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+  const guestBtn = document.getElementById("guest-btn");
+  if (guestBtn) {
+    guestBtn.addEventListener("click", function(event) {
+      event.preventDefault();
+      loginAsGuest();
+    });
+  }
+});
+
