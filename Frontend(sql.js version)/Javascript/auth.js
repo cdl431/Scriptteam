@@ -6,21 +6,19 @@ initSqlJs({
 }).then(SQLLib => {
   SQL = SQLLib;
   initDatabase();
-
-  // Only add DOM listeners after DB is ready
   setupSignupHandler();
+  setupLoginHandler();
   setupShowUsersHandler();
 });
 
 function initDatabase() {
   if (localStorage.getItem("userDatabase")) {
-    console.log("Loading saved database from localStorage...");
     const savedDb = Uint8Array.from(JSON.parse(localStorage.getItem("userDatabase")));
     db = new SQL.Database(savedDb);
+    console.log("Database loaded from localStorage.");
   } else {
-    console.log("No saved database. Creating a new one...");
     db = new SQL.Database();
-    const createTableQuery = `
+    db.run(`
       CREATE TABLE IF NOT EXISTS users (
         userID INTEGER PRIMARY KEY,
         firstName TEXT,
@@ -31,9 +29,9 @@ function initDatabase() {
         phone TEXT,
         role TEXT
       );
-    `;
-    db.run(createTableQuery);
+    `);
     saveDatabase();
+    console.log("New database created.");
   }
 }
 
@@ -47,72 +45,78 @@ function loginUser(userData) {
   localStorage.setItem("user", JSON.stringify(userWithoutPassword));
 }
 
-function logoutUser() {
-  localStorage.removeItem("user");
-  window.location.href = "login.html";
-}
-
-function isUserLoggedIn() {
-  return !!localStorage.getItem("user");
-}
-
-function getCurrentUser() {
-  const userData = localStorage.getItem("user");
-  return userData ? JSON.parse(userData) : null;
-}
-
 function setupSignupHandler() {
   const signupForm = document.getElementById("signup-form");
   if (!signupForm) return;
 
-  signupForm.addEventListener("submit", function(event) {
-    event.preventDefault();
+  signupForm.addEventListener("submit", function (e) {
+    e.preventDefault();
 
-    const firstName = document.getElementById('firstName').value.trim();
-    const lastName = document.getElementById('lastName').value.trim();
-    const username = document.getElementById('username').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value.trim();
-    const phone = document.getElementById('phone') ? document.getElementById('phone').value.trim() : "";
-    const role = document.getElementById('role').value;
+    const firstName = document.getElementById("firstName").value.trim();
+    const lastName = document.getElementById("lastName").value.trim();
+    const username = document.getElementById("username").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const role = document.getElementById("role").value;
 
     if (firstName && lastName && username && email && password && role) {
-      signupRequest(firstName, lastName, username, email, password, phone, role);
+      const checkStmt = db.prepare("SELECT * FROM users WHERE username = ? OR email = ?");
+      checkStmt.bind([username, email]);
+
+      let exists = false;
+      while (checkStmt.step()) {
+        exists = true;
+      }
+      checkStmt.free();
+
+      if (exists) {
+        alert("Username or email already exists.");
+      } else {
+        const insertStmt = db.prepare(`
+          INSERT INTO users (firstName, lastName, username, email, password, phone, role)
+          VALUES (?, ?, ?, ?, ?, ?, ?)
+        `);
+        insertStmt.bind([firstName, lastName, username, email, password, phone, role]);
+        insertStmt.step();
+        insertStmt.free();
+        saveDatabase();
+
+        loginUser({ firstName, lastName, username, email, password, phone, role });
+        window.location.href = "HomePage.html";
+      }
     } else {
-      document.getElementById('error-message').style.display = 'block';
+      document.getElementById("error-message").style.display = "block";
     }
   });
 }
 
-function signupRequest(firstName, lastName, username, email, password, phone, role) {
-  const checkUserQuery = `SELECT * FROM users WHERE username = ? OR email = ?`;
-  const checkStmt = db.prepare(checkUserQuery);
-  checkStmt.bind([username, email]);
+function setupLoginHandler() {
+  const loginForm = document.getElementById("login-form");
+  if (!loginForm) return;
 
-  let exists = false;
-  while (checkStmt.step()) {
-    exists = true;
-  }
-  checkStmt.free();
+  loginForm.addEventListener("submit", function (e) {
+    e.preventDefault();
 
-  if (exists) {
-    alert('Username or email already in use.');
-  } else {
-    const insertQuery = `
-      INSERT INTO users (firstName, lastName, username, email, password, phone, role)
-      VALUES (?, ?, ?, ?, ?, ?, ?)
+    const usernameOrEmail = document.getElementById("login-username").value.trim();
+    const password = document.getElementById("login-password").value.trim();
+
+    const query = `
+      SELECT * FROM users WHERE (username = ? OR email = ?) AND password = ?
     `;
-    const insertStmt = db.prepare(insertQuery);
-    insertStmt.bind([firstName, lastName, username, email, password, phone, role]);
-    insertStmt.step();
-    insertStmt.free();
+    const stmt = db.prepare(query);
+    stmt.bind([usernameOrEmail, usernameOrEmail, password]);
 
-    saveDatabase();
-    document.getElementById("signup-form").reset();
-
-    loginUser({ firstName, lastName, username, email, password, phone, role });
-    window.location.href = "HomePage.html";
-  }
+    if (stmt.step()) {
+      const row = stmt.getAsObject();
+      stmt.free();
+      loginUser(row);
+      window.location.href = "HomePage.html";
+    } else {
+      stmt.free();
+      alert("Invalid username/email or password.");
+    }
+  });
 }
 
 function setupShowUsersHandler() {
@@ -137,15 +141,14 @@ function setupShowUsersHandler() {
 
       const users = rows.map(row => {
         const userObj = {};
-        row.forEach((val, index) => {
-          userObj[columns[index]] = val;
+        row.forEach((val, i) => {
+          userObj[columns[i]] = val;
         });
         return userObj;
       });
 
       console.table(users);
-      alert("Check DevTools console for the user list.");
+      alert("Check console for user list.");
     }
   });
 }
-
