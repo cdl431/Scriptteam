@@ -1,6 +1,16 @@
 let db;
 let SQL;
 
+async function hashPassword(pw) {
+  const buf = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(pw)
+  );
+  return Array.from(new Uint8Array(buf))
+    .map(b => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
 initSqlJs({
   locateFile: file => `Javascript/${file}`
 }).then(SQLLib => {
@@ -46,7 +56,7 @@ function setupSignupHandler() {
   const form = document.getElementById("signup-form");
   if (!form) return;
 
-  form.addEventListener("submit", e => {
+  form.addEventListener("submit", async e => {
     e.preventDefault();
 
     const firstName = document.getElementById("firstName").value.trim();
@@ -67,8 +77,17 @@ function setupSignupHandler() {
         document.getElementById("error-message").textContent = "Username or e‑mail already taken.";
         document.getElementById("error-message").style.display = "block";
       } else {
+        const hashedPw = await hashPassword(password)
         const ins = db.prepare("INSERT INTO users VALUES(NULL,?,?,?,?,?,?,?)");
-        ins.run([firstName, lastName, username, email, password, phone, role]);
+        ins.run([
+          firstName,
+          lastName,
+          username,
+          email,
+          hashedPw, 
+          phone,
+          role
+      ]);
         ins.free();
         saveDatabase();
 

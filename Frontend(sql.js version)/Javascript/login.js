@@ -1,6 +1,16 @@
 let db;
 let SQL;
 
+async function hashPassword(pw) {
+  const buf = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(pw)
+  );
+  return Array.from(new Uint8Array(buf))
+    .map(b => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
 initSqlJs({
   locateFile: file => `Javascript/${file}`
 }).then(SQLLib => {
@@ -23,7 +33,7 @@ function setupLoginHandler() {
   const form = document.getElementById("login-form");
   if (!form) return;
 
-  form.addEventListener("submit", e => {
+  form.addEventListener("submit", async e => {
     e.preventDefault();
 
     const idField   = document.getElementById("username").value.trim();  
@@ -34,7 +44,7 @@ function setupLoginHandler() {
     const stmt = db.prepare(
       "SELECT * FROM users WHERE (username=? OR email=?) AND password=?"
     );
-    stmt.bind([idField, idField, password]);
+    stmt.bind([idField, idField, await hashPassword(password)]);
 
     if (stmt.step()) {
       const user = stmt.getAsObject();
