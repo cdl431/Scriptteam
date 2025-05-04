@@ -7,19 +7,17 @@ initSqlJs({
   SQL = SQLLib;
   initDatabase();
   setupSignupHandler();
-  setupLoginHandler();
-  setupShowUsersHandler();
+  setupShowUsersHandler();   
 });
 
 function initDatabase() {
   if (localStorage.getItem("userDatabase")) {
-    const savedDb = Uint8Array.from(JSON.parse(localStorage.getItem("userDatabase")));
-    db = new SQL.Database(savedDb);
-    console.log("Database loaded from localStorage.");
+    const saved = Uint8Array.from(JSON.parse(localStorage.getItem("userDatabase")));
+    db = new SQL.Database(saved);
   } else {
     db = new SQL.Database();
     db.run(`
-      CREATE TABLE IF NOT EXISTS users (
+      CREATE TABLE IF NOT EXISTS users(
         userID INTEGER PRIMARY KEY,
         firstName TEXT,
         lastName TEXT,
@@ -31,7 +29,6 @@ function initDatabase() {
       );
     `);
     saveDatabase();
-    console.log("New database created.");
   }
 }
 
@@ -40,46 +37,39 @@ function saveDatabase() {
   localStorage.setItem("userDatabase", JSON.stringify(Array.from(binaryArray)));
 }
 
-function loginUser(userData) {
-  const { password, ...userWithoutPassword } = userData;
-  localStorage.setItem("user", JSON.stringify(userWithoutPassword));
+function loginUser(u) {
+  const { password, ...noPw } = u;
+  localStorage.setItem("user", JSON.stringify(noPw));
 }
 
 function setupSignupHandler() {
-  const signupForm = document.getElementById("signup-form");
-  if (!signupForm) return;
+  const form = document.getElementById("signup-form");
+  if (!form) return;
 
-  signupForm.addEventListener("submit", function (e) {
+  form.addEventListener("submit", e => {
     e.preventDefault();
 
     const firstName = document.getElementById("firstName").value.trim();
-    const lastName = document.getElementById("lastName").value.trim();
-    const username = document.getElementById("username").value.trim();
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value.trim();
-    const phone = document.getElementById("phone").value.trim();
-    const role = document.getElementById("role").value;
+    const lastName  = document.getElementById("lastName").value.trim();
+    const username  = document.getElementById("username").value.trim();
+    const email     = document.getElementById("email").value.trim();
+    const password  = document.getElementById("password").value.trim();
+    const phone     = document.getElementById("phone").value.trim();
+    const role      = document.getElementById("role").value;
 
     if (firstName && lastName && username && email && password && role) {
-      const checkStmt = db.prepare("SELECT * FROM users WHERE username = ? OR email = ?");
-      checkStmt.bind([username, email]);
-
-      let exists = false;
-      while (checkStmt.step()) {
-        exists = true;
-      }
-      checkStmt.free();
+      const chk = db.prepare("SELECT 1 FROM users WHERE username=? OR email=?");
+      chk.bind([username, email]);
+      const exists = chk.step();
+      chk.free();
 
       if (exists) {
-        alert("Username or email already exists.");
+        document.getElementById("error-message").textContent = "Username or e‑mail already taken.";
+        document.getElementById("error-message").style.display = "block";
       } else {
-        const insertStmt = db.prepare(`
-          INSERT INTO users (firstName, lastName, username, email, password, phone, role)
-          VALUES (?, ?, ?, ?, ?, ?, ?)
-        `);
-        insertStmt.bind([firstName, lastName, username, email, password, phone, role]);
-        insertStmt.step();
-        insertStmt.free();
+        const ins = db.prepare("INSERT INTO users VALUES(NULL,?,?,?,?,?,?,?)");
+        ins.run([firstName, lastName, username, email, password, phone, role]);
+        ins.free();
         saveDatabase();
 
         loginUser({ firstName, lastName, username, email, password, phone, role });
@@ -91,91 +81,13 @@ function setupSignupHandler() {
   });
 }
 
-function setupLoginHandler() {
-  const loginForm = document.getElementById("login-form");
-  if (!loginForm) return;
-
-  loginForm.addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const usernameOrEmail = document.getElementById("login-username").value.trim();
-    const password = document.getElementById("login-password").value.trim();
-
-    const query = `
-      SELECT * FROM users WHERE (username = ? OR email = ?) AND password = ?
-    `;
-    const stmt = db.prepare(query);
-    stmt.bind([usernameOrEmail, usernameOrEmail, password]);
-
-    if (stmt.step()) {
-      const row = stmt.getAsObject();
-      stmt.free();
-      loginUser(row);
-      window.location.href = "HomePage.html";
-    } else {
-      stmt.free();
-      alert("Invalid username/email or password.");
-    }
-  });
-}
-
 function setupShowUsersHandler() {
-  const showBtn = document.getElementById("show-users");
-  if (!showBtn) return;
-
-  showBtn.addEventListener("click", () => {
-    const savedDb = localStorage.getItem("userDatabase");
-    if (!savedDb) {
-      alert("No database found.");
-      return;
-    }
-
-    const dbTemp = new SQL.Database(Uint8Array.from(JSON.parse(savedDb)));
-    const result = dbTemp.exec("SELECT * FROM users");
-
-    if (result.length === 0) {
-      console.log("No users found.");
-    } else {
-      const columns = result[0].columns;
-      const rows = result[0].values;
-
-      const users = rows.map(row => {
-        const userObj = {};
-        row.forEach((val, i) => {
-          userObj[columns[i]] = val;
-        });
-        return userObj;
-      });
-
-      console.table(users);
-      alert("Check console for user list.");
-    }
+  const btn = document.getElementById("show-users");
+  if (!btn) return;
+  btn.addEventListener("click", () => {
+    const dbCopy = new SQL.Database(db.export());
+    const res = dbCopy.exec("SELECT * FROM users");
+    console.table(res[0]?.values || []);
+    alert("Open the console for user list.");
   });
 }
-
-function loginAsGuest() {
-  const guestUser = {
-    firstName: 'Guest',
-    lastName: '',
-    username: 'guest_user',
-    email: '',
-    password: '',
-    phone: '',
-    role: 'Guest'
-  };
-
-  localStorage.setItem("user", JSON.stringify(guestUser));
-
-  window.location.href = "HomePage.html";
-}
-
-document.addEventListener("DOMContentLoaded", function() {
-  const guestBtn = document.getElementById("guest-btn");
-  if (guestBtn) {
-    guestBtn.addEventListener("click", function(event) {
-      event.preventDefault();
-      loginAsGuest();
-    });
-  }
-});
-

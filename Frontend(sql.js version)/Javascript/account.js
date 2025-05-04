@@ -117,7 +117,5 @@ function setupPage() {
   }
 }
 
-    });
-  }
-}
+
 

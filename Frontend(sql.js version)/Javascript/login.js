@@ -1,76 +1,67 @@
 let db;
+let SQL;
 
 initSqlJs({
-  locateFile: file => `Javascript/${file}` // adjust if your path is different
+  locateFile: file => `Javascript/${file}`
 }).then(SQLLib => {
-  window.SQL = SQLLib;
+  SQL = SQLLib;
   initDatabase();
+  setupLoginHandler();
+  setupGuestLogin();
 });
 
 function initDatabase() {
   if (localStorage.getItem("userDatabase")) {
-    const savedDb = Uint8Array.from(JSON.parse(localStorage.getItem("userDatabase")));
-    db = new SQL.Database(savedDb);
+    const saved = Uint8Array.from(JSON.parse(localStorage.getItem("userDatabase")));
+    db = new SQL.Database(saved);
   } else {
-    console.error("No saved user database found.");
+    console.error("No user database yet—tell your users to sign up first.");
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const loginForm = document.getElementById("login-form");
+function setupLoginHandler() {
+  const form = document.getElementById("login-form");
+  if (!form) return;
 
-  if (loginForm) {
-    loginForm.addEventListener("submit", async function(event) {
-      event.preventDefault();
+  form.addEventListener("submit", e => {
+    e.preventDefault();
 
-      const username = document.getElementById("username").value.trim();
-      const password = document.getElementById("password").value.trim();
+    const idField   = document.getElementById("username").value.trim();  
+    const password  = document.getElementById("password").value.trim();
 
-      if (db) {
-        const stmt = db.prepare("SELECT * FROM users WHERE username = ? AND password = ?");
-        stmt.bind([username, password]);
+    if (!db) return;
 
-        if (stmt.step()) {
-          const row = stmt.getAsObject();
-          console.log("Login successful:", row);
+    const stmt = db.prepare(
+      "SELECT * FROM users WHERE (username=? OR email=?) AND password=?"
+    );
+    stmt.bind([idField, idField, password]);
 
-          localStorage.setItem("user", JSON.stringify(row));
-          window.location.href = "HomePage.html";
-        } else {
-          console.error("Invalid username or password");
-          document.getElementById("error-message").style.display = "block";
-        }
-
-        stmt.free();
-      } else {
-        console.error("Database not loaded");
-      }
-    });
-  }
-});
-
-function loginAsGuest() {
-  const guestUser = {
-    firstName: 'Guest',
-    lastName: '',
-    username: 'guest_user',
-    email: '',
-    password: '',
-    phone: '',
-    role: 'Guest'
-  };
-
-  localStorage.setItem("user", JSON.stringify(guestUser));
-
-  window.location.href = "HomePage.html";
+    if (stmt.step()) {
+      const user = stmt.getAsObject();
+      delete user.password;
+      localStorage.setItem("user", JSON.stringify(user));
+      window.location.href = "HomePage.html";
+    } else {
+      document.getElementById("error-message").style.display = "block";
+    }
+    stmt.free();
+  });
 }
 
-document.addEventListener("DOMContentLoaded", function() {
-  const guestBtn = document.getElementById("guest-btn");
-  if (guestBtn) {
-    guestBtn.addEventListener("click", function(event) {
-      event.preventDefault();
-      loginAsGuest();
-    });
-  }
-});
+function setupGuestLogin() {
+  const btn = document.getElementById("guest-btn");
+  if (!btn) return;
+  btn.addEventListener("click", e => {
+    e.preventDefault();
+    const guest = {
+      firstName: "Guest",
+      lastName: "",
+      username: "guest_user",
+      email: "",
+      phone: "",
+      role: "Guest"
+    };
+    localStorage.setItem("user", JSON.stringify(guest));
+    window.location.href = "HomePage.html";
+  });
+}
