@@ -1,19 +1,16 @@
 let db;
 
 document.addEventListener("DOMContentLoaded", async () => {
-  // 1. Load the SQL engine
   const SQL = await initSqlJs({ locateFile: file => `Javascript/${file}` });
 
-  // 2. Load or create the database
   if (localStorage.getItem("userDatabase")) {
     const savedDb = Uint8Array.from(JSON.parse(localStorage.getItem("userDatabase")));
     db = new SQL.Database(savedDb);
   } else {
-    db = new SQL.Database(); // Just create an empty one (not adding a table)
+    db = new SQL.Database(); 
     saveDatabase();
   }
 
-  // 3. Now run your existing page logic
   setupPage();
 });
 
@@ -76,7 +73,7 @@ function setupPage() {
   const editForm = document.getElementById("editProfileForm");
   if (editForm) {
     editForm.addEventListener("submit", (e) => {
-      e.preventDefault(); // Prevent form reload
+      e.preventDefault(); 
 
       console.log("Form submitted!");
 
@@ -92,10 +89,8 @@ function setupPage() {
         password: passwordInput.value
       };
 
-      // Update localStorage
       localStorage.setItem("user", JSON.stringify(updatedUser));
 
-      // Update SQLite
       const updateStmt = db.prepare(`
         UPDATE users
         SET username = ?, email = ?, phone = ?, password = ?
@@ -112,13 +107,16 @@ function setupPage() {
       updateStmt.free();
       saveDatabase();
 
-      // Update page
       usernameSpan.textContent = updatedUser.username;
       emailSpan.textContent = updatedUser.email;
 
       document.getElementById("editProfileForm").style.display = "none";
 
       alert("Profile updated successfully!");
+    });
+  }
+}
+
     });
   }
 }
