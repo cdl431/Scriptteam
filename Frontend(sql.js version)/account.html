@@ -1,76 +1,59 @@
-<!DO<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>My Account - EZ-Watch</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>My Account – EZ-Watch</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="layout">
     <aside class="sidebar">
       <div class="logo-container">
-        <img src="images/logo.png" alt="EZ-Watch Logo" class="logo-img" />
+        <img src="Images/logo.png" alt="EZ-Watch Logo" class="logo-img">
       </div>
       <ul class="nav-links">
         <li><a href="HomePage.html">Home</a></li>
         <li><a href="shopping.html">Shop</a></li>
-        <li><a href="account.html">Account</a></li>
+        <li><a href="account.html" class="active">Account</a></li>
         <li><a href="cart.html">Cart</a></li>
         <li><a href="admin.html" id="admin-link" style="display:none">Admin</a></li>
       </ul>
     </aside>
 
     <div class="main">
-      <header class="topbar" style="display: flex; justify-content: space-between; align-items: center;">
+      <header class="topbar">
         <div class="page-title">
           <div class="title-main">My Account</div>
           <div class="subtitle">Manage your EZ-Watch profile.</div>
         </div>
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <div id="greeting" class="title-main" style="color: white;"></div>
-
-          <a href="login.html" class="auth-btn" id="logout-btn">Log Out</a>
-        </div>
+        <button id="logout-btn" class="auth-btn">Log Out</button>
       </header>
 
       <main class="main-content">
         <section class="account-section">
-          <div class="account-info">
-            <p style="font-size: 18px;"><strong>Username:</strong> <span id="userUsername">[Username]</span></p>
-            <p style="font-size: 18px;"><strong>Email:</strong> <span id="userEmail">user@example.com</span></p>
+          <div id="profile-view" class="account-info">
+            <p><strong>Username:</strong> <span id="display-username"></span></p>
+            <p><strong>Email:</strong>    <span id="display-email"></span></p>
           </div>
 
           <div class="account-actions">
-            <a href="#" id="edit-profile-btn" class="account-btn edit">Edit Profile</a>
-            <a href="add-product.html" class="account-btn">Add Product</a>
-            <a href="edit-product.html" class="account-btn">Edit Product</a>
+            <button id="edit-btn"   class="account-btn">Edit Profile</button>
+            <button id="delete-btn" class="account-btn danger">Delete Account</button>
+            <button onclick="location.href='add-product.html'"  class="account-btn">Add Product</button>
+            <button onclick="location.href='edit-product.html'" class="account-btn">Edit Product</button>
           </div>
 
-          <form id="editProfileForm" class="edit-profile-form" style="display: none;">
-            <div class="form-group">
-              <label for="username">Username</label>
-              <input type="text" id="username" name="username" required />
-            </div>
+          <form id="edit-form" class="account-actions" style="display:none">
+            <input id="firstName" placeholder="First Name" required>
+            <input id="lastName"  placeholder="Last Name"  required>
+            <input id="username"  placeholder="Username"   required>
+            <input id="email"     placeholder="Email"      type="email" required>
+            <input id="phone"     placeholder="Phone"      required>
 
-            <div class="form-group">
-              <label for="email">Email</label>
-              <input type="email" id="email" name="email" required />
-            </div>
-
-            <div class="form-group">
-              <label for="phone">Phone Number</label>
-              <input type="tel" id="phone" name="phone" required />
-            </div>
-
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" id="password" name="password" required />
-            </div>
-
-            <div class="form-buttons">
-              <button type="submit" class="account-btn">Save</button>
-              <button type="button" id="cancelEditBtn" class="account-btn">Cancel</button>
+            <div class="account-actions">
+              <button type="button" id="save-btn"   class="account-btn">Save</button>
+              <button type="button" id="cancel-btn" class="account-btn outline">Cancel</button>
             </div>
           </form>
         </section>
@@ -78,19 +61,11 @@
     </div>
   </div>
 
-  <footer>
-    <p>&copy; 2025 EZ-Watch.</p>
-  </footer>
-  <script>
-    const me   = JSON.parse(localStorage.getItem("user") || "{}");
-    const link = document.getElementById("admin-link");
-    if (me.role === "Admin") {
-      link.style.display = "block";
-    } else {
-      link.style.display = "none";
-    }
-  </script>
-  <script src="Javascript/account.js"></script>
+  <footer><p>&copy; 2025 EZ-Watch</p></footer>
+
+  <!-- load SQL.js runtime -->
   <script src="Javascript/sql-wasm.js"></script>
+  <!-- our account logic -->
+  <script src="Javascript/account.js"></script>
 </body>
 </html>
