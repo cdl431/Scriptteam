@@ -644,3 +644,54 @@ input[type="password"] {
   gap: 10px;
   justify-content: flex-end;
 }
+
+.dashboard-card {
+  background: #111;
+  border-radius: 12px;
+  box-shadow: 0 6px 30px rgba(0,0,0,.45);
+  padding: 50px 70px;
+  width: 100%;
+  max-width: 1100px;   
+  margin: 60px auto;   
+  display: flex;
+  flex-direction: column;
+  gap: 60px;
+}
+
+
+.dash-title  { margin: 0; font-size: 1.7rem; color: #fff; }
+.dash-sub    { margin: 4px 0 30px; color: #999; }
+
+
+.dash-h2     { margin: 0 0 18px; font-size: 1.25rem; color: #fff; }
+
+
+.dash-section { display: flex; flex-direction: column; gap: 18px; }
+
+
+.dash-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #0d0d0d;
+  border: 1px solid #222;
+  font-size: 0.9rem;
+}
+.dash-table th,
+.dash-table td { padding: 10px 14px; text-align: left; }
+.dash-table th {
+  background: #1b1b1b;
+  color: #69afff;
+  font-weight: 600;
+}
+.dash-table tr:nth-child(even) td { background: #141414; }
+
+
+.dash-table button.danger {
+  background: #e44848; border: none; color: #fff;
+  padding: 5px 12px; border-radius: 4px; cursor: pointer;
+}
+.dash-table button.danger:hover { background: #c43a3a; }
+.dash-table select {
+  background: #121212; color: #eee; border: 1px solid #333;
+  border-radius: 4px; padding: 4px 6px;
+}
