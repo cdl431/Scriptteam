@@ -38,14 +38,16 @@
           <a href="login.html" class="auth-btn" id="login-btn">Log In</a>
           <a href="signup.html" class="auth-btn" id="signup-btn">Sign Up</a>
         </div>
-      </div>
-    </header>
-
+        <div class="auth-buttons">
+          <a href="login.html" class="auth-btn">Log In</a>
+          <a href="signup.html" class="auth-btn">Sign Up</a>
+        </div>
+      </header>
 
       <div class="shopping-content">
         <section id="search-bar">
           <div class="bar">
-            <input type="text" id="search-input" placeholder="Search products..." />
+            <input type="text" id="search-input" placeholder="Search for product..." />
             <button id="search-button">Search</button>
           </div>
         </section>
@@ -57,8 +59,53 @@
         </section>
 
         <section id="feature" class="shopping-p1">
-          <h1>All Products</h1>
-          <div class="pro-container" id="featured-container"></div>
+          <h1>Featured Products</h1>
+          <p>Browse to your heart's content!</p>
+          <div class="pro-container">
+            <div class="product" data-name="Product A" data-tags="book, sci-fi">
+              <a href="product.html">
+                <img src="Images/placeholder_image.jpg" alt="placeholder" />
+                <div class="description">
+                  <h5>Product A</h5>
+                  <span>Tags: sci-fi, book</span>
+                  <h4>$100</h4>
+                </div>
+              </a>
+            </div>
+
+            <div class="product" data-name="Product B" data-tags="movie, horror">
+              <a href="product.html">
+                <img src="Images/placeholder_image.jpg" alt="placeholder">
+                <div class="description">
+                  <h5>Product B</h5>
+                  <span>Tags: horror, movie</span>
+                  <h4>$120</h4>
+                </div>
+              </a>
+            </div>
+
+            <div class="product" data-name="Product C" data-tags="romance, book">
+              <a href="product.html">
+                <img src="Images/placeholder_image.jpg" alt="placeholder">
+                <div class="description">
+                  <h5>Product C</h5>
+                  <span>Tags: romance, book</span>
+                  <h4>$150</h4>
+                </div>
+              </a>
+            </div>
+
+            <div class="product" data-name="Product D" data-tags="sci-fi, movie">
+              <a href="product.html">
+                <img src="Images/placeholder_image.jpg" alt="placeholder">
+                <div class="description">
+                  <h5>Product D</h5>
+                  <span>Tags: sci-fi, movie</span>
+                  <h4>$200</h4>
+                </div>
+              </a>
+            </div>
+          </div>
         </section>
       </div>
 
@@ -70,11 +117,13 @@
 
   <script src="Javascript/sql-wasm.js"></script>
   <script src="Javascript/shopping.js" defer></script>
+
   <script>
-    const me   = JSON.parse(localStorage.getItem("user")||"{}");
+    const me   = JSON.parse(localStorage.getItem("user") || "{}");
     document.getElementById("admin-link")
             .style.display = me.role==="Admin" ? "block" : "none";
   </script>
+
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const me        = JSON.parse(localStorage.getItem("user") || "{}");
@@ -98,7 +147,5 @@
       }
     });
   </script>
-  
-  
 </body>
 </html>
