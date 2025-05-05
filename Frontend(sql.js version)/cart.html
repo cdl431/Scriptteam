@@ -4,11 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Your Cart – EZ-Watch</title>
-
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="layout">
+
     <aside class="sidebar">
       <div class="logo-container">
         <img src="Images/logo.png" alt="EZ-Watch Logo" class="logo-img" />
@@ -23,18 +23,14 @@
     </aside>
 
     <div class="main">
-      <header class="topbar" style="display: flex; justify-content: space-between; align-items: center;">
+      <header class="topbar">
         <div class="page-title">
           <div class="title-main">Your Cart</div>
-          <div class="subtitle">Review and manage your selected items.</div>
+          <div class="subtitle">Review items before checkout.</div>
         </div>
-  
-        
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <div id="welcome-msg" class="title-main" style="color: white; font-size: 20px; display: none;"></div>
-  
-          <a href="login.html" class="auth-btn" id="logout-btn" style="display: none;">Log Out</a>
-  
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span id="welcome-msg" class="title-main" style="color:white;font-size:20px;display:none"></span>
+          <button id="logout-btn" class="auth-btn" style="display:none">Log Out</button>
           <div id="auth-buttons" class="auth-buttons">
             <a href="login.html" class="auth-btn" id="login-btn">Log In</a>
             <a href="signup.html" class="auth-btn" id="signup-btn">Sign Up</a>
@@ -47,7 +43,7 @@
           <div id="cart-items" class="cart-items">
           </div>
           <div class="cart-summary">
-            <p>Total: $<span id="cart-total">0.00</span></p>
+            <h3>Total: $<span id="cart-total">0.00</span></h3>
             <button id="checkout-btn" class="account-btn">Proceed to Checkout</button>
           </div>
         </section>
@@ -55,38 +51,25 @@
     </div>
   </div>
 
-  <footer><p>&copy; 2025 EZ-Watch.</p></footer>
+  <footer>
+    <p>&copy; 2025 EZ-Watch.</p>
+  </footer>
 
+ 
   <script src="Javascript/cart.js" defer></script>
-
   <script>
-    const me   = JSON.parse(localStorage.getItem("user")||"{}");
-    document.getElementById("admin-link")
-            .style.display = me.role==="Admin" ? "block" : "none";
-  </script>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const me        = JSON.parse(localStorage.getItem("user") || "{}");
-      const welcome   = document.getElementById("welcome-msg");
-      const loginBtn  = document.getElementById("login-btn");
-      const signupBtn = document.getElementById("signup-btn");
-      const logoutBtn = document.getElementById("logout-btn");
-      const adminLink = document.getElementById("admin-link");
-  
-      if (me.firstName) {
-        welcome.textContent   = `Welcome, ${me.firstName}!`;
-        welcome.style.display = "inline-block";
-  
-        loginBtn.style.display   = "none";
-        signupBtn.style.display  = "none";
-        logoutBtn.style.display  = "inline-block";
-      }
-  
-      if (me.role === "Admin") {
-        adminLink.style.display = "block";
-      }
-    });
-  </script>
 
+    const me = JSON.parse(localStorage.getItem("user")||"{}");
+    if (me.firstName) {
+      document.getElementById("welcome-msg").textContent = `Welcome, ${me.firstName}!`;
+      document.getElementById("welcome-msg").style.display = "inline-block";
+      document.getElementById("login-btn").style.display   = "none";
+      document.getElementById("signup-btn").style.display  = "none";
+      document.getElementById("logout-btn").style.display  = "inline-block";
+    }
+    if (me.role === "Admin") {
+      document.getElementById("admin-link").style.display = "block";
+    }
+  </script>
 </body>
 </html>
