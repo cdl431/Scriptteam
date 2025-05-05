@@ -10,13 +10,14 @@
   <div class="layout">
     <aside class="sidebar">
       <div class="logo-container">
-        <img src="Images/logo.png" alt="EZ-Watch Logo" class="logo-img">
+        <img src="Images/logo.png" alt="EZ-Watch Logo" class="logo-img" />
       </div>
       <ul class="nav-links">
         <li><a href="HomePage.html">Home</a></li>
         <li><a href="shopping.html">Shop</a></li>
         <li><a href="account.html">Account</a></li>
         <li><a href="cart.html">Cart</a></li>
+        <li><a href="admin.html" id="admin-link" style="display:none">Admin</a></li>
       </ul>
     </aside>
 
@@ -38,7 +39,7 @@
         <!-- Search Bar -->
         <section id="search-bar">
           <div class="bar">
-            <input type="text" id="search-input" placeholder="Search for product...">
+            <input type="text" id="search-input" placeholder="Search for product..." />
             <button id="search-button">Search</button>
           </div>
         </section>
@@ -52,11 +53,11 @@
         <!-- Featured Products (Static) -->
         <section id="feature" class="shopping-p1">
           <h1>Featured Products</h1>
-          <p>Browse to your hearts content!</p>
+          <p>Browse to your heart’s content!</p>
           <div class="pro-container">
             <div class="product" data-name="Product A" data-tags="book, sci-fi">
               <a href="product.html">
-                <img src="Images/placeholder_image.jpg" alt="placeholder">
+                <img src="Images/placeholder_image.jpg" alt="placeholder" />
                 <div class="description">
                   <h5>Product A</h5>
                   <span>Tags: sci-fi, book</span>
@@ -110,5 +111,53 @@
   <!-- Load sql.js first, then your shopping logic -->
   <script src="Javascript/sql-wasm.js"></script>
   <script src="Javascript/shopping.js"></script>
+  
+  <script>
+    function fetchProductsFromBackend(searchTerm) {
+      const products = [
+        { name: 'Product A', tags: ['book', 'sci-fi'], price: 100 },
+      ];
+      return products.filter(p => {
+        const term = searchTerm.toLowerCase();
+        return p.name.toLowerCase().includes(term) ||
+               p.tags.some(t => t.toLowerCase().includes(term));
+      });
+    }
+
+    document.getElementById('search-button').addEventListener('click', () => {
+      const container = document.getElementById('search-results-container');
+      container.innerHTML = '';
+      const results = fetchProductsFromBackend(
+        document.getElementById('search-input').value.trim()
+      );
+      if (results.length) {
+        results.forEach(p => {
+          const div = document.createElement('div');
+          div.className = 'product';
+          div.innerHTML = `
+            <a href="product.html">
+              <img src="Images/placeholder_image.jpg" alt="${p.name}">
+              <div class="description">
+                <h5>${p.name}</h5>
+                <span>Tags: ${p.tags.join(', ')}</span>
+                <h4>$${p.price}</h4>
+              </div>
+              <i class="cart"></i>
+            </a>`;
+          container.appendChild(div);
+        });
+      } else {
+        const msg = document.createElement('p');
+        msg.textContent = "No products found.";
+        container.appendChild(msg);
+      }
+    });
+  </script>
+
+  <script>
+    const me   = JSON.parse(localStorage.getItem("user") || "{}");
+    const link = document.getElementById("admin-link");
+    link.style.display = (me.role === "Admin") ? "block" : "none";
+  </script>
 </body>
 </html>

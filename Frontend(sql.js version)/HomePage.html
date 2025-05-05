@@ -17,6 +17,7 @@
         <li><a href="shopping.html">Shop</a></li>
         <li><a href="account.html">Account</a></li>
         <li><a href="cart.html">Cart</a></li>
+        <li><a href="admin.html" id="admin-link" style="display:none">Admin</a></li>
       </ul>
     </aside>
 
@@ -88,6 +89,15 @@
         }
       }
     });
-  </script>  
+  </script> 
+  <script>
+    const me   = JSON.parse(localStorage.getItem("user") || "{}");
+    const link = document.getElementById("admin-link");
+    if (me.role === "Admin") {
+      link.style.display = "block";
+    } else {
+      link.style.display = "none";
+    }
+  </script> 
 </body>
 </html>
