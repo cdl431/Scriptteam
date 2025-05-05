@@ -2,15 +2,15 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Product Details | EZ-Watch</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="layout product-page">
+  <div class="layout">
     <aside class="sidebar">
       <div class="logo-container">
-        <img src="Images/logo.png" alt="EZ-Watch Logo" class="logo-img">
+        <img src="Images/logo.png" alt="EZ-Watch Logo" class="logo-img" />
       </div>
       <ul class="nav-links">
         <li><a href="HomePage.html">Home</a></li>
@@ -22,57 +22,74 @@
     </aside>
 
     <div class="main">
-      <header class="topbar">
+      <header class="topbar" style="display: flex; justify-content: space-between; align-items: center;">
         <div class="page-title">
-          <div class="title-main">Product Name</div>
-          <div class="subtitle">Detailed view of the selected product.</div>
+          <div class="title-main">Shop</div>
+          <div class="subtitle">Browse watches posted by our community.</div>
+        </div>
+  
+        
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div id="welcome-msg" class="title-main" style="color: white; font-size: 20px; display: none;"></div>
+  
+          <a href="login.html" class="auth-btn" id="logout-btn" style="display: none;">Log Out</a>
+  
+          <div id="auth-buttons" class="auth-buttons">
+            <a href="login.html" class="auth-btn" id="login-btn">Log In</a>
+            <a href="signup.html" class="auth-btn" id="signup-btn">Sign Up</a>
+          </div>
         </div>
       </header>
 
-      <!-- Product Details Section -->
-      <section id="product-details">
-        <div class="product-container">
+      <main class="main-content">
+        <section class="product-container">
           <div class="product-image">
-            <img src="Images/placeholder_image.jpg" alt="Product Image">
+            <img id="prod-image" src="Images/placeholder_image.jpg" alt="Product Image" />
           </div>
-
           <div class="product-info">
-            <h2 class="product-name">Product Name</h2>
-            <div class="tags">
-              <span class="tag">Tag1</span>
-              <span class="tag">Tag2</span>
-              <span class="tag">Tag3</span>
-            </div>
-            <h3 class="product-price">$199.99</h3>
-            <p class="product-description">
-              This is a detailed description of the product. Here you can explain all the features and benefits of the product.
-            </p>
-
-            <div class="seller-info">
-              <p>Seller: <strong>John Doe</strong></p>
-            </div>
-
-            <div class="purchase-actions">
-              <button class="add-to-cart">Add to Cart</button>
-              <button class="buy-now">Buy Now</button>
-            </div>
+            <h2 id="prod-name">Loading…</h2>
+            <p id="prod-description">Please wait while we fetch details.</p>
+            <h3 id="prod-price">$0.00</h3>
+            <button id="add-to-cart" class="account-btn">Add to Cart</button>
           </div>
-        </div>
-      </section>
+        </section>
+      </main>
     </div>
-
-    <footer>
-      <p>&copy; 2025 EZ-Watch.</p>
-    </footer>
   </div>
+
+  <footer>
+    <p>&copy; 2025 EZ-Watch.</p>
+  </footer>
+
+  <script src="Javascript/sql-wasm.js"></script>
+  <script src="Javascript/product.js" defer></script>
   <script>
-    const me   = JSON.parse(localStorage.getItem("user") || "{}");
-    const link = document.getElementById("admin-link");
-    if (me.role === "Admin") {
-      link.style.display = "block";
-    } else {
-      link.style.display = "none";
-    }
+    const me = JSON.parse(localStorage.getItem("user") || "{}");
+    document.getElementById("admin-link").style.display =
+      me.role === "Admin" ? "block" : "none";
+  </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const me        = JSON.parse(localStorage.getItem("user") || "{}");
+      const welcome   = document.getElementById("welcome-msg");
+      const loginBtn  = document.getElementById("login-btn");
+      const signupBtn = document.getElementById("signup-btn");
+      const logoutBtn = document.getElementById("logout-btn");
+      const adminLink = document.getElementById("admin-link");
+  
+      if (me.firstName) {
+        welcome.textContent   = `Welcome, ${me.firstName}!`;
+        welcome.style.display = "inline-block";
+  
+        loginBtn.style.display   = "none";
+        signupBtn.style.display  = "none";
+        logoutBtn.style.display  = "inline-block";
+      }
+  
+      if (me.role === "Admin") {
+        adminLink.style.display = "block";
+      }
+    });
   </script>
 </body>
 </html>

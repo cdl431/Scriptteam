@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
   <title>Add Product - EZ-Watch</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -10,7 +10,7 @@
   <div class="layout">
     <aside class="sidebar">
       <div class="logo-container">
-        <img src="images/logo.png" alt="EZ-Watch Logo" class="logo-img" />
+        <img src="Images/logo.png" alt="EZ-Watch Logo" class="logo-img" />
       </div>
       <ul class="nav-links">
         <li><a href="HomePage.html">Home</a></li>
@@ -20,38 +20,46 @@
     </aside>
 
     <div class="main">
-      <header class="topbar">
-        <div class="branding">
-          <div id="addTitle" class="title-main">Add New Product</div>
-          <div class="subtitle">Fill in details for Product here.</div>
+      <header class="topbar" style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="page-title">
+          <div class="title-main">Shop</div>
+          <div class="subtitle">Browse watches posted by our community.</div>
         </div>
-        <div class="auth-buttons">
-          <a href="login.html" class="auth-btn">Log In</a>
-          <a href="signup.html" class="auth-btn">Sign Up</a>
+  
+        
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div id="welcome-msg" class="title-main" style="color: white; font-size: 20px; display: none;"></div>
+  
+          <a href="login.html" class="auth-btn" id="logout-btn" style="display: none;">Log Out</a>
+  
+          <div id="auth-buttons" class="auth-buttons">
+            <a href="login.html" class="auth-btn" id="login-btn">Log In</a>
+            <a href="signup.html" class="auth-btn" id="signup-btn">Sign Up</a>
+          </div>
         </div>
       </header>
 
       <main class="main-content">
         <section class="form-section">
-          <form class="add-product-form">
+          <form id="addProductForm" class="add-product-form">
             <div class="form-group">
               <label for="productName">Product Name</label>
-              <input type="text" id="productName" name="productName" placeholder="Enter product name" required />
+              <input type="text" id="productName" required />
             </div>
 
             <div class="form-group">
               <label for="productDescription">Description</label>
-              <textarea id="productDescription" name="productDescription" placeholder="Enter product description" rows="4" required></textarea>
+              <textarea id="productDescription" rows="4" required></textarea>
             </div>
 
             <div class="form-group">
               <label for="productPrice">Price ($)</label>
-              <input type="number" id="productPrice" name="productPrice" placeholder="0.00" step="0.01" required />
+              <input type="number" id="productPrice" step="0.01" required />
             </div>
 
             <div class="form-group">
               <label for="productCategory">Category</label>
-              <select id="productCategory" name="productCategory" required>
+              <select id="productCategory" required>
                 <option value="">Select category</option>
                 <option value="movies">Movies</option>
                 <option value="series">TV Series</option>
@@ -61,14 +69,14 @@
               </select>
             </div>
 
-            <div class="form-group" id="customCategoryContainer" style="display: none; margin-top: 10px;">
+            <div class="form-group" id="customCategoryContainer" style="display:none;">
               <label for="customCategory">Custom Category</label>
-              <input type="text" id="customCategory" name="customCategory" placeholder="Enter custom category" />
+              <input type="text" id="customCategory" />
             </div>
 
             <div class="form-group">
               <label for="productImage">Product Image</label>
-              <input type="file" id="productImage" name="productImage" accept="image/*" />
+              <input type="file" id="productImage" accept="image/*" />
             </div>
 
             <div class="form-buttons">
@@ -80,6 +88,35 @@
       </main>
     </div>
   </div>
+
+  <footer>
+    <p>&copy; 2025 EZ-Watch.</p>
+  </footer>
+
+  <script src="Javascript/sql-wasm.js"></script>
+  <script src="Javascript/add-product.js" defer></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const me        = JSON.parse(localStorage.getItem("user") || "{}");
+      const welcome   = document.getElementById("welcome-msg");
+      const loginBtn  = document.getElementById("login-btn");
+      const signupBtn = document.getElementById("signup-btn");
+      const logoutBtn = document.getElementById("logout-btn");
+      const adminLink = document.getElementById("admin-link");
+  
+      if (me.firstName) {
+        welcome.textContent   = `Welcome, ${me.firstName}!`;
+        welcome.style.display = "inline-block";
+  
+        loginBtn.style.display   = "none";
+        signupBtn.style.display  = "none";
+        logoutBtn.style.display  = "inline-block";
+      }
+  
+      if (me.role === "Admin") {
+        adminLink.style.display = "block";
+      }
+    });
+  </script>
 </body>
-<script src="Javascript/product.js"></script>
 </html>

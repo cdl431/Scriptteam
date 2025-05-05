@@ -1,55 +1,49 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const cartContainer = document.getElementById("cart-items-container");
-    const totalItemsElem = document.getElementById("total-items");
-    const totalPriceElem = document.getElementById("total-price");
-  
-    // Placeholder: fetch cart data from backend when ready
-    fetchCartData().then(cartData => {
-      if (!cartData || cartData.length === 0) {
-        cartContainer.innerHTML = "<p>Your cart is currently empty.</p>";
-        return;
-      }
-  
-      renderCartItems(cartData);
-      updateCartSummary(cartData);
-    }).catch(err => {
-      console.error("Failed to fetch cart data:", err);
-      cartContainer.innerHTML = "<p>Error loading your cart. Please try again later.</p>";
-    });
-  
-    document.getElementById("checkout-btn").addEventListener("click", () => {
-      alert("");// do checkout function
+
+window.addEventListener("DOMContentLoaded", () => {
+  const container = document.getElementById("cart-items");
+  const totalEl   = document.getElementById("cart-total");
+  const checkout  = document.getElementById("checkout-btn");
+
+  const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+
+  if (cart.length === 0) {
+    container.innerHTML = "<p>Your cart is empty.</p>";
+    checkout.disabled   = true;
+    return;
+  }
+
+  let total = 0;
+  cart.forEach(({ name, price, qty }, idx) => {
+    const lineTotal = price * qty;
+    total += lineTotal;
+
+    const div = document.createElement("div");
+    div.className = "cart-item";
+    div.innerHTML = `
+      <div class="cart-item-info">
+        <h4>${name}</h4>
+        <p>$${price} × ${qty} = $${lineTotal.toFixed(2)}</p>
+      </div>
+      <button class="remove-btn" data-index="${idx}">×</button>
+    `;
+    container.appendChild(div);
+  });
+
+  totalEl.textContent = total.toFixed(2);
+
+  container.querySelectorAll(".remove-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const i = Number(btn.dataset.index);
+      cart.splice(i, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      window.location.reload();
     });
   });
-  
-  async function fetchCartData() {
-    // fill with real API call later
-    return [];
-  }
-  
-  function renderCartItems(cartItems) {
-    const cartContainer = document.getElementById("cart-items-container");
-    cartContainer.innerHTML = "";
-  
-    cartItems.forEach(item => {
-      const itemElem = document.createElement("div");
-      itemElem.classList.add("cart-item");
-  
-      itemElem.innerHTML = `
-        <h3>${item.title}</h3>
-        <p>Price: $${item.price.toFixed(2)}</p>
-        <p>Quantity: ${item.quantity}</p>
-      `;
-  
-      cartContainer.appendChild(itemElem);
-    });
-  }
-  
-  function updateCartSummary(cartItems) {
-    const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
-    const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  
-    document.getElementById("total-items").textContent = totalItems;
-    document.getElementById("total-price").textContent = totalPrice.toFixed(2);
-  }
-  
+
+  checkout.addEventListener("click", () => {
+    if (!confirm("Proceed to checkout and clear your cart?")) return;
+    localStorage.removeItem("cart");
+    alert("Thanks for your purchase!\nYour cart is now empty.");
+    window.location.href = "HomePage.html";
+  });
+});

@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cart | EZ-Watch</title>
+  <title>Your Cart – EZ-Watch</title>
   <link rel="stylesheet" href="styles.css" />
-  <script defer src="Javascript/cart.js"></script>
 </head>
 <body>
   <div class="layout">
+    <!-- Sidebar -->
     <aside class="sidebar">
       <div class="logo-container">
         <img src="Images/logo.png" alt="EZ-Watch Logo" class="logo-img" />
@@ -17,31 +17,40 @@
         <li><a href="HomePage.html">Home</a></li>
         <li><a href="shopping.html">Shop</a></li>
         <li><a href="account.html">Account</a></li>
-        <li><a href="cart.html">Cart</a></li>
+        <li><a href="cart.html" class="active">Cart</a></li>
         <li><a href="admin.html" id="admin-link" style="display:none">Admin</a></li>
       </ul>
     </aside>
 
+    <!-- Main Content -->
     <div class="main">
-      <header class="topbar">
+      <header class="topbar" style="display: flex; justify-content: space-between; align-items: center;">
         <div class="page-title">
-          <div class="title-main">Your Cart</div>
-          <div class="subtitle">Review and manage your selected items.</div>
+          <div class="title-main">Shop</div>
+          <div class="subtitle">Browse watches posted by our community.</div>
         </div>
-        <div class="auth-buttons">
-          <a href="login.html" class="auth-btn">Log In</a>
-          <a href="signup.html" class="auth-btn">Sign Up</a>
+  
+        
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div id="welcome-msg" class="title-main" style="color: white; font-size: 20px; display: none;"></div>
+  
+          <a href="login.html" class="auth-btn" id="logout-btn" style="display: none;">Log Out</a>
+  
+          <div id="auth-buttons" class="auth-buttons">
+            <a href="login.html" class="auth-btn" id="login-btn">Log In</a>
+            <a href="signup.html" class="auth-btn" id="signup-btn">Sign Up</a>
+          </div>
         </div>
       </header>
 
       <main class="main-content">
         <section class="cart-section">
           <div id="cart-items" class="cart-items">
+            <!-- JS will inject each line item here -->
           </div>
-
           <div class="cart-summary">
-            <p id="cart-total">Total: $<span>0.00</span></p>
-            <button class="checkout-btn">Proceed to Checkout</button>
+            <h3>Total: $<span id="cart-total">0.00</span></h3>
+            <button id="checkout-btn" class="account-btn">Checkout</button>
           </div>
         </section>
       </main>
@@ -49,17 +58,39 @@
   </div>
 
   <footer>
-    <p>&copy; 2025 EZ-Watch</p>
+    <p>&copy; 2025 EZ-Watch.</p>
   </footer>
 
+
+  <script src="Javascript/cart.js" defer></script>
   <script>
-    const me   = JSON.parse(localStorage.getItem("user") || "{}");
-    const link = document.getElementById("admin-link");
-    if (me.role === "Admin") {
-      link.style.display = "block";
-    } else {
-      link.style.display = "none";
-    }
+   
+    const me   = JSON.parse(localStorage.getItem("user")||"{}");
+    document.getElementById("admin-link")
+            .style.display = me.role==="Admin" ? "block" : "none";
+  </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const me        = JSON.parse(localStorage.getItem("user") || "{}");
+      const welcome   = document.getElementById("welcome-msg");
+      const loginBtn  = document.getElementById("login-btn");
+      const signupBtn = document.getElementById("signup-btn");
+      const logoutBtn = document.getElementById("logout-btn");
+      const adminLink = document.getElementById("admin-link");
+  
+      if (me.firstName) {
+        welcome.textContent   = `Welcome, ${me.firstName}!`;
+        welcome.style.display = "inline-block";
+  
+        loginBtn.style.display   = "none";
+        signupBtn.style.display  = "none";
+        logoutBtn.style.display  = "inline-block";
+      }
+  
+      if (me.role === "Admin") {
+        adminLink.style.display = "block";
+      }
+    });
   </script>
 </body>
 </html>

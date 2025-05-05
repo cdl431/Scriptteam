@@ -1,85 +1,77 @@
-let db;
-let SQL;
 
-initSqlJs({
-  locateFile: file => `Javascript/${file}`
-}).then(SQLLib => {
-  SQL = SQLLib;
-  initProductDatabase();
-  setupSearchHandler();
-});
-
-function initProductDatabase() {
-  if (localStorage.getItem("productDatabase")) {
-    const saved = Uint8Array.from(JSON.parse(localStorage.getItem("productDatabase")));
-    db = new SQL.Database(saved);
+function initProductDb(SQL) {
+  let pdb;
+  const saved = localStorage.getItem("productDatabase");
+  if (saved) {
+    pdb = new SQL.Database(Uint8Array.from(JSON.parse(saved)));
   } else {
-    db = new SQL.Database();
-    db.run(`
+    pdb = new SQL.Database();
+    pdb.run(`
       CREATE TABLE IF NOT EXISTS products (
-        productID INTEGER PRIMARY KEY,
-        name TEXT,
-        price REAL,
-        description TEXT
+        productID   INTEGER PRIMARY KEY,
+        name        TEXT,
+        description TEXT,
+        price       REAL,
+        owner       INTEGER,
+        imageURL    TEXT
       );
     `);
-    // Sample products (optional for demo)
-    const sampleProducts = [
-      { name: "Indie Book", price: 75, description: "A thoughtful indie publication." },
-      { name: "Collector DVD", price: 130, description: "A rare horror collector's edition." },
-    ];
-    sampleProducts.forEach(p => {
-      const stmt = db.prepare("INSERT INTO products (name, price, description) VALUES (?, ?, ?)");
-      stmt.run([p.name, p.price, p.description]);
-      stmt.free();
-    });
-    saveProductDatabase();
-  }
-}
-
-function saveProductDatabase() {
-  const binaryArray = db.export();
-  localStorage.setItem("productDatabase", JSON.stringify(Array.from(binaryArray)));
-}
-
-function setupSearchHandler() {
-  const searchInput = document.getElementById("search-input");
-  const searchButton = document.getElementById("search-button");
-  const resultsContainer = document.getElementById("search-results-container");
-
-  searchButton.addEventListener("click", () => {
-    const query = searchInput.value.trim().toLowerCase();
-    resultsContainer.innerHTML = "";
-
-    if (!query) {
-      resultsContainer.innerHTML = "<p>Please enter a search term.</p>";
-      return;
-    }
-
-    const res = db.exec("SELECT * FROM products");
-    const rows = res[0]?.values || [];
-
-    const matched = rows.filter(([id, name, price, description]) =>
-      name.toLowerCase().includes(query) ||
-      description.toLowerCase().includes(query)
+    localStorage.setItem(
+      "productDatabase",
+      JSON.stringify(Array.from(pdb.export()))
     );
-
-    if (matched.length === 0) {
-      resultsContainer.innerHTML = "<p>No matching products found.</p>";
-      return;
-    }
-
-    matched.forEach(([id, name, price, description]) => {
-      const productDiv = document.createElement("div");
-      productDiv.className = "product";
-      productDiv.innerHTML = `
-        <div class="description">
-          <h5>${name}</h5>
-          <p>${description}</p>
-          <h4>$${price}</h4>
-        </div>
-      `;
-      resultsContainer.appendChild(productDiv);
-    });
-  });
+  }
+  return pdb;
 }
+
+(async () => {
+  const SQL = await initSqlJs({ locateFile: f => `Javascript/${f}` });
+  const db  = initProductDb(SQL);
+
+  renderAllProducts();
+
+  document.getElementById("search-button")
+    .addEventListener("click", () => {
+      const term    = document.getElementById("search-input")
+                            .value.trim().toLowerCase();
+      const pattern = `%${term}%`;
+
+      const res = db.exec(`
+        SELECT productID, name, price, description, imageURL
+        FROM products
+        WHERE lower(name) LIKE '${pattern}'
+           OR lower(description) LIKE '${pattern}'
+      `)[0];
+
+      const rows = res?.values || [];
+      displayProducts(rows, document.getElementById("search-results-container"));
+    });
+
+  function renderAllProducts() {
+    const res = db.exec(`
+      SELECT productID, name, price, description, imageURL
+      FROM products
+    `)[0];
+    const rows = res?.values || [];
+    displayProducts(rows, document.getElementById("featured-container"));
+  }
+
+  function displayProducts(rows, container) {
+    container.innerHTML = "";
+    rows.forEach(([id, name, price, desc, imageURL]) => {
+      const imgSrc = imageURL || "Images/placeholder_image.jpg";
+      const div = document.createElement("div");
+      div.className = "product";
+      div.innerHTML = `
+        <a href="product.html?id=${id}">
+          <img src="${imgSrc}" alt="${name}" />
+          <div class="description">
+            <h5>${name}</h5>
+            <span>${desc.slice(0,40)}…</span>
+            <h4>$${price}</h4>
+          </div>
+        </a>`;
+      container.appendChild(div);
+    });
+  }
+})();

@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>EZ-Watch</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shop - EZ-Watch</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -14,7 +14,7 @@
       </div>
       <ul class="nav-links">
         <li><a href="HomePage.html">Home</a></li>
-        <li><a href="shopping.html">Shop</a></li>
+        <li><a href="shopping.html" class="active">Shop</a></li>
         <li><a href="account.html">Account</a></li>
         <li><a href="cart.html">Cart</a></li>
         <li><a href="admin.html" id="admin-link" style="display:none">Admin</a></li>
@@ -22,83 +22,41 @@
     </aside>
 
     <div class="main">
-      <header class="topbar">
-        <div class="branding">
-          <div class="page-title">
-            <div class="title-main">Shopping</div>
-            <div class="subtitle">Browse items posted by fellow customers.</div>
-          </div>
+      <!-- ─── Top Bar ─────────────────────────────────── -->
+    <header class="topbar" style="display: flex; justify-content: space-between; align-items: center;">
+      <div class="page-title">
+        <div class="title-main">Shop</div>
+        <div class="subtitle">Browse watches posted by our community.</div>
+      </div>
+
+      
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div id="welcome-msg" class="title-main" style="color: white; font-size: 20px; display: none;"></div>
+
+        <a href="login.html" class="auth-btn" id="logout-btn" style="display: none;">Log Out</a>
+
+        <div id="auth-buttons" class="auth-buttons">
+          <a href="login.html" class="auth-btn" id="login-btn">Log In</a>
+          <a href="signup.html" class="auth-btn" id="signup-btn">Sign Up</a>
         </div>
-        <div class="auth-buttons">
-          <a href="login.html" class="auth-btn">Log In</a>
-          <a href="signup.html" class="auth-btn">Sign Up</a>
-        </div>
-      </header>
+      </div>
+    </header>
+
 
       <div class="shopping-content">
-        <!-- Search Bar -->
         <section id="search-bar">
-          <div class="bar">
-            <input type="text" id="search-input" placeholder="Search for product..." />
-            <button id="search-button">Search</button>
-          </div>
+          <input type="text" id="search-input" placeholder="Search products..." />
+          <button id="search-button">Search</button>
         </section>
 
-        <!-- Search Results -->
         <section id="search-results" class="shopping-p1">
           <h2>Search Results</h2>
           <div class="pro-container" id="search-results-container"></div>
         </section>
 
-        <!-- Featured Products (Static) -->
         <section id="feature" class="shopping-p1">
-          <h1>Featured Products</h1>
-          <p>Browse to your heart’s content!</p>
-          <div class="pro-container">
-            <div class="product" data-name="Product A" data-tags="book, sci-fi">
-              <a href="product.html">
-                <img src="Images/placeholder_image.jpg" alt="placeholder" />
-                <div class="description">
-                  <h5>Product A</h5>
-                  <span>Tags: sci-fi, book</span>
-                  <h4>$100</h4>
-                </div>
-              </a>
-            </div>
-
-            <div class="product" data-name="Product B" data-tags="movie, horror">
-              <a href="product.html">
-                <img src="Images/placeholder_image.jpg" alt="placeholder">
-                <div class="description">
-                  <h5>Product B</h5>
-                  <span>Tags: horror, movie</span>
-                  <h4>$120</h4>
-                </div>
-              </a>
-            </div>
-
-            <div class="product" data-name="Product C" data-tags="romance, book">
-              <a href="product.html">
-                <img src="Images/placeholder_image.jpg" alt="placeholder">
-                <div class="description">
-                  <h5>Product C</h5>
-                  <span>Tags: romance, book</span>
-                  <h4>$150</h4>
-                </div>
-              </a>
-            </div>
-
-            <div class="product" data-name="Product D" data-tags="sci-fi, movie">
-              <a href="product.html">
-                <img src="Images/placeholder_image.jpg" alt="placeholder">
-                <div class="description">
-                  <h5>Product D</h5>
-                  <span>Tags: sci-fi, movie</span>
-                  <h4>$200</h4>
-                </div>
-              </a>
-            </div>
-          </div>
+          <h1>All Products</h1>
+          <div class="pro-container" id="featured-container"></div>
         </section>
       </div>
 
@@ -108,56 +66,37 @@
     </div>
   </div>
 
-  <!-- Load sql.js first, then your shopping logic -->
   <script src="Javascript/sql-wasm.js"></script>
-  <script src="Javascript/shopping.js"></script>
-  
+  <script src="Javascript/shopping.js" defer></script>
   <script>
-    function fetchProductsFromBackend(searchTerm) {
-      const products = [
-        { name: 'Product A', tags: ['book', 'sci-fi'], price: 100 },
-      ];
-      return products.filter(p => {
-        const term = searchTerm.toLowerCase();
-        return p.name.toLowerCase().includes(term) ||
-               p.tags.some(t => t.toLowerCase().includes(term));
-      });
-    }
-
-    document.getElementById('search-button').addEventListener('click', () => {
-      const container = document.getElementById('search-results-container');
-      container.innerHTML = '';
-      const results = fetchProductsFromBackend(
-        document.getElementById('search-input').value.trim()
-      );
-      if (results.length) {
-        results.forEach(p => {
-          const div = document.createElement('div');
-          div.className = 'product';
-          div.innerHTML = `
-            <a href="product.html">
-              <img src="Images/placeholder_image.jpg" alt="${p.name}">
-              <div class="description">
-                <h5>${p.name}</h5>
-                <span>Tags: ${p.tags.join(', ')}</span>
-                <h4>$${p.price}</h4>
-              </div>
-              <i class="cart"></i>
-            </a>`;
-          container.appendChild(div);
-        });
-      } else {
-        const msg = document.createElement('p');
-        msg.textContent = "No products found.";
-        container.appendChild(msg);
+    const me   = JSON.parse(localStorage.getItem("user")||"{}");
+    document.getElementById("admin-link")
+            .style.display = me.role==="Admin" ? "block" : "none";
+  </script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const me        = JSON.parse(localStorage.getItem("user") || "{}");
+      const welcome   = document.getElementById("welcome-msg");
+      const loginBtn  = document.getElementById("login-btn");
+      const signupBtn = document.getElementById("signup-btn");
+      const logoutBtn = document.getElementById("logout-btn");
+      const adminLink = document.getElementById("admin-link");
+  
+      if (me.firstName) {
+        welcome.textContent   = `Welcome, ${me.firstName}!`;
+        welcome.style.display = "inline-block";
+  
+        loginBtn.style.display   = "none";
+        signupBtn.style.display  = "none";
+        logoutBtn.style.display  = "inline-block";
+      }
+  
+      if (me.role === "Admin") {
+        adminLink.style.display = "block";
       }
     });
   </script>
-
-  <script>
-    const me   = JSON.parse(localStorage.getItem("user") || "{}");
-    const link = document.getElementById("admin-link");
-    link.style.display = (me.role === "Admin") ? "block" : "none";
-  </script>
+  
+  
 </body>
 </html>
