@@ -1,100 +1,71 @@
-import logout from "./logout.js";
+(async () => {
+  const SQL = await initSqlJs({ locateFile: f => `Javascript/${f}` });
 
-let db, SQL;
+  const uDump = localStorage.getItem("userDatabase");
+  const pDump = localStorage.getItem("productDatabase");
+  const uDb   = uDump ? new SQL.Database(Uint8Array.from(JSON.parse(uDump))) : null;
+  const pDb   = pDump ? new SQL.Database(Uint8Array.from(JSON.parse(pDump))) : null;
 
-initSqlJs({ locateFile: f => `Javascript/${f}` }).then(SQLLib => {
-  SQL = SQLLib;
-  boot();
-});
+  function persist(db, key) {
+    localStorage.setItem(key, JSON.stringify(Array.from(db.export())));
+  }
 
-function boot() {
-  const saved = localStorage.getItem("userDatabase");
-  if (!saved) return;
-  db = new SQL.Database(Uint8Array.from(JSON.parse(saved)));
+  if (uDb) {
+    const rows = uDb.exec("SELECT userID, username, email, role FROM users")[0]?.values || [];
+    const tbody = document.querySelector("#user-table tbody");
+    rows.forEach(([id, username, email, role]) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${id}</td>
+        <td>${username}</td>
+        <td>${email}</td>
+        <td>${role}</td>
+        <td>
+          <button class="table-btn delete-user" data-id="${id}">Delete</button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+  }
 
-  const me = JSON.parse(localStorage.getItem("user") || "{}");
-  if (me.role !== "Admin") { location.href = "HomePage.html"; return; }
+  if (pDb) {
+    const rows = pDb.exec("SELECT productID, name, owner, price FROM products")[0]?.values || [];
+    const tbody = document.querySelector("#product-table tbody");
+    rows.forEach(([id, name, owner, price]) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `
+        <td>${id}</td>
+        <td>${name}</td>
+        <td>${owner}</td>
+        <td>${price}</td>
+        <td>
+          <button class="table-btn delete-product" data-id="${id}">Delete</button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+  }
 
-  document.getElementById("logout-btn").onclick = logout;
+  document.querySelectorAll(".delete-user").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.id;
+      if (!confirm(`Delete user #${id}?`)) return;
 
-  renderUsers();
-  renderProducts();
-}
+      uDb.run("DELETE FROM users WHERE userID = ?", [id]);
+      persist(uDb, "userDatabase");
 
-/* ── USERS ───────────────────────────────────────────── */
-function renderUsers() {
-  const tbody = document.querySelector("#user-table tbody");
-  tbody.innerHTML = "";
-
-  const rows = db.exec("SELECT userID,username,email,role FROM users")[0]?.values || [];
-  rows.forEach(([id,u,e,r]) => {
-    const tr = tbody.insertRow();
-    tr.innerHTML = `
-      <td>${id}</td><td>${u}</td><td>${e}</td>
-      <td>
-        <select data-id="${id}" class="role-select">
-          <option ${r==="User"   ?"selected":""}>User</option>
-          <option ${r==="Seller" ?"selected":""}>Seller</option>
-          <option ${r==="Admin"  ?"selected":""}>Admin</option>
-        </select>
-      </td>
-      <td><button class="danger" data-del="${id}">Delete</button></td>
-    `;
+      btn.closest("tr").remove();
+    });
   });
 
-  tbody.addEventListener("change", e => {
-    if (!e.target.matches(".role-select")) return;
-    const id   = e.target.dataset.id;
-    const role = e.target.value;
-    db.run(`UPDATE users SET role='${role}' WHERE userID=${id}`);
-    saveDB();
+  document.querySelectorAll(".delete-product").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const id = btn.dataset.id;
+      if (!confirm(`Delete product #${id}?`)) return;
+
+      pDb.run("DELETE FROM products WHERE productID = ?", [id]);
+      persist(pDb, "productDatabase");
+
+      btn.closest("tr").remove();
+    });
   });
 
-  tbody.addEventListener("click", e => {
-    if (!e.target.dataset.del) return;
-    const id = e.target.dataset.del;
-    if (!confirm("Delete user "+id+" ?")) return;
-    db.run(`DELETE FROM users WHERE userID=${id}`);
-    saveDB();
-    renderUsers();
-  });
-}
-
-/* ── PRODUCTS ────────────────────────────────────────── */
-function renderProducts() {
-  const tbody = document.querySelector("#product-table tbody");
-  tbody.innerHTML = "";
-
-  if (!tableExists("products")) return;
-
-  const q = `
-    SELECT p.productID, p.name, u.username, p.price
-    FROM products p JOIN users u ON p.ownerID = u.userID
-  `;
-  const rows = db.exec(q)[0]?.values || [];
-  rows.forEach(([pid,name,owner,price]) => {
-    const tr = tbody.insertRow();
-    tr.innerHTML = `
-      <td>${pid}</td><td>${name}</td><td>${owner}</td><td>$${price}</td>
-      <td><button class="danger" data-dprod="${pid}">Delete</button></td>
-    `;
-  });
-
-  tbody.addEventListener("click", e => {
-    if (!e.target.dataset.dprod) return;
-    const pid = e.target.dataset.dprod;
-    if (!confirm("Delete product "+pid+" ?")) return;
-    db.run(`DELETE FROM products WHERE productID=${pid}`);
-    saveDB();
-    renderProducts();
-  });
-}
-
-/* ── helpers ─────────────────────────────────────────── */
-function saveDB() {
-  localStorage.setItem("userDatabase", JSON.stringify(Array.from(db.export())));
-}
-
-function tableExists(name) {
-  return db.exec(`SELECT name FROM sqlite_master WHERE type='table' AND name='${name}'`).length;
-}
+})();
