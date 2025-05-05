@@ -36,6 +36,7 @@
       </header>
 
       <div class="shopping-content">
+        <!-- Search Bar -->
         <section id="search-bar">
           <div class="bar">
             <input type="text" id="search-input" placeholder="Search for product..." />
@@ -43,11 +44,13 @@
           </div>
         </section>
 
+        <!-- Search Results -->
         <section id="search-results" class="shopping-p1">
           <h2>Search Results</h2>
           <div class="pro-container" id="search-results-container"></div>
         </section>
 
+        <!-- Featured Products (Static) -->
         <section id="feature" class="shopping-p1">
           <h1>Featured Products</h1>
           <p>Browse to your heart’s content!</p>
@@ -60,7 +63,39 @@
                   <span>Tags: sci-fi, book</span>
                   <h4>$100</h4>
                 </div>
-                <i class="cart"></i>
+              </a>
+            </div>
+
+            <div class="product" data-name="Product B" data-tags="movie, horror">
+              <a href="product.html">
+                <img src="Images/placeholder_image.jpg" alt="placeholder">
+                <div class="description">
+                  <h5>Product B</h5>
+                  <span>Tags: horror, movie</span>
+                  <h4>$120</h4>
+                </div>
+              </a>
+            </div>
+
+            <div class="product" data-name="Product C" data-tags="romance, book">
+              <a href="product.html">
+                <img src="Images/placeholder_image.jpg" alt="placeholder">
+                <div class="description">
+                  <h5>Product C</h5>
+                  <span>Tags: romance, book</span>
+                  <h4>$150</h4>
+                </div>
+              </a>
+            </div>
+
+            <div class="product" data-name="Product D" data-tags="sci-fi, movie">
+              <a href="product.html">
+                <img src="Images/placeholder_image.jpg" alt="placeholder">
+                <div class="description">
+                  <h5>Product D</h5>
+                  <span>Tags: sci-fi, movie</span>
+                  <h4>$200</h4>
+                </div>
               </a>
             </div>
           </div>
@@ -73,6 +108,10 @@
     </div>
   </div>
 
+  <!-- Load sql.js first, then your shopping logic -->
+  <script src="Javascript/sql-wasm.js"></script>
+  <script src="Javascript/shopping.js"></script>
+  
   <script>
     function fetchProductsFromBackend(searchTerm) {
       const products = [

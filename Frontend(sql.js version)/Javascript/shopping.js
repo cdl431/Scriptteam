@@ -1,61 +1,85 @@
-(() => {
-    const products = new Map();
-  
-    
-    const addBtn = document.createElement("button");
-    const productList = document.createElement("div");
-    const infoBox = document.createElement("div");
-  
-    
-    addBtn.textContent = "Add Product";
-    addBtn.style.marginBottom = "20px";
-  
-    infoBox.style.display = "none";
-    infoBox.style.marginTop = "20px";
-    infoBox.style.padding = "10px";
-    infoBox.style.border = "1px solid #ccc";
-  
-    
-    document.body.appendChild(addBtn);
-    document.body.appendChild(productList);
-    document.body.appendChild(infoBox);
-  
-    
-    function addProduct({ name, price, description }) {
-      const id = Date.now(); // Unique ID
-      products.set(id, { name, price, description });
-  
-      const el = document.createElement("div");
-      el.textContent = name;
-      el.style.cursor = "pointer";
-      el.style.color = "blue";
-      el.style.margin = "10px 0";
-  
-      el.addEventListener("click", () => showProduct(id));
-      productList.appendChild(el);
-    }
-  
-    
-    function showProduct(id) {
-      const product = products.get(id);
-      if (!product) return;
-  
-      infoBox.innerHTML = `
-        <h3>${product.name}</h3>
-        <p><strong>Price:</strong> ${product.price}</p>
-        <p>${product.description}</p>
-      `;
-      infoBox.style.display = "block";
-    }
-  
-    
-    addBtn.addEventListener("click", () => {
-      const name = prompt("Product name:");
-      const price = prompt("Product price:");
-      const description = prompt("Product description:");
-      if (name && price && description) {
-        addProduct({ name, price, description });
-      }
+let db;
+let SQL;
+
+initSqlJs({
+  locateFile: file => `Javascript/${file}`
+}).then(SQLLib => {
+  SQL = SQLLib;
+  initProductDatabase();
+  setupSearchHandler();
+});
+
+function initProductDatabase() {
+  if (localStorage.getItem("productDatabase")) {
+    const saved = Uint8Array.from(JSON.parse(localStorage.getItem("productDatabase")));
+    db = new SQL.Database(saved);
+  } else {
+    db = new SQL.Database();
+    db.run(`
+      CREATE TABLE IF NOT EXISTS products (
+        productID INTEGER PRIMARY KEY,
+        name TEXT,
+        price REAL,
+        description TEXT
+      );
+    `);
+    // Sample products (optional for demo)
+    const sampleProducts = [
+      { name: "Indie Book", price: 75, description: "A thoughtful indie publication." },
+      { name: "Collector DVD", price: 130, description: "A rare horror collector's edition." },
+    ];
+    sampleProducts.forEach(p => {
+      const stmt = db.prepare("INSERT INTO products (name, price, description) VALUES (?, ?, ?)");
+      stmt.run([p.name, p.price, p.description]);
+      stmt.free();
     });
-  })();
-  
+    saveProductDatabase();
+  }
+}
+
+function saveProductDatabase() {
+  const binaryArray = db.export();
+  localStorage.setItem("productDatabase", JSON.stringify(Array.from(binaryArray)));
+}
+
+function setupSearchHandler() {
+  const searchInput = document.getElementById("search-input");
+  const searchButton = document.getElementById("search-button");
+  const resultsContainer = document.getElementById("search-results-container");
+
+  searchButton.addEventListener("click", () => {
+    const query = searchInput.value.trim().toLowerCase();
+    resultsContainer.innerHTML = "";
+
+    if (!query) {
+      resultsContainer.innerHTML = "<p>Please enter a search term.</p>";
+      return;
+    }
+
+    const res = db.exec("SELECT * FROM products");
+    const rows = res[0]?.values || [];
+
+    const matched = rows.filter(([id, name, price, description]) =>
+      name.toLowerCase().includes(query) ||
+      description.toLowerCase().includes(query)
+    );
+
+    if (matched.length === 0) {
+      resultsContainer.innerHTML = "<p>No matching products found.</p>";
+      return;
+    }
+
+    matched.forEach(([id, name, price, description]) => {
+      const productDiv = document.createElement("div");
+      productDiv.className = "product";
+      productDiv.innerHTML = `
+        <div class="description">
+          <h5>${name}</h5>
+          <p>${description}</p>
+          <h4>$${price}</h4>
+        </div>
+      `;
+      resultsContainer.appendChild(productDiv);
+    });
+  });
+}
