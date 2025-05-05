@@ -4,11 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Your Cart – EZ-Watch</title>
+
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <div class="layout">
-    <!-- Sidebar -->
     <aside class="sidebar">
       <div class="logo-container">
         <img src="Images/logo.png" alt="EZ-Watch Logo" class="logo-img" />
@@ -22,12 +22,11 @@
       </ul>
     </aside>
 
-    <!-- Main Content -->
     <div class="main">
       <header class="topbar" style="display: flex; justify-content: space-between; align-items: center;">
         <div class="page-title">
-          <div class="title-main">Shop</div>
-          <div class="subtitle">Browse watches posted by our community.</div>
+          <div class="title-main">Your Cart</div>
+          <div class="subtitle">Review and manage your selected items.</div>
         </div>
   
         
@@ -46,25 +45,21 @@
       <main class="main-content">
         <section class="cart-section">
           <div id="cart-items" class="cart-items">
-            <!-- JS will inject each line item here -->
           </div>
           <div class="cart-summary">
-            <h3>Total: $<span id="cart-total">0.00</span></h3>
-            <button id="checkout-btn" class="account-btn">Checkout</button>
+            <p>Total: $<span id="cart-total">0.00</span></p>
+            <button id="checkout-btn" class="account-btn">Proceed to Checkout</button>
           </div>
         </section>
       </main>
     </div>
   </div>
 
-  <footer>
-    <p>&copy; 2025 EZ-Watch.</p>
-  </footer>
-
+  <footer><p>&copy; 2025 EZ-Watch.</p></footer>
 
   <script src="Javascript/cart.js" defer></script>
+
   <script>
-   
     const me   = JSON.parse(localStorage.getItem("user")||"{}");
     document.getElementById("admin-link")
             .style.display = me.role==="Admin" ? "block" : "none";
@@ -92,5 +87,6 @@
       }
     });
   </script>
+
 </body>
 </html>

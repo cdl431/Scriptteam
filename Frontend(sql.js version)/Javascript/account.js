@@ -18,6 +18,7 @@
 
   document.getElementById("display-username").textContent = me.username;
   document.getElementById("display-email").textContent    = me.email;
+  document.getElementById("display-balance").textContent = (me.balance||0).toFixed(2);
 
   document.getElementById("logout-btn")
     .addEventListener("click", () => {
@@ -62,7 +63,14 @@
       const exported = db.export();
       localStorage.setItem("userDatabase", JSON.stringify(Array.from(exported)));
 
-      const updated = { ...me, firstName: fn, lastName: ln, username: un, email: em, phone: ph };
+      const updated = {
+        ...me,
+        firstName: fn,
+        lastName: ln,
+        username: un,
+        email: em,
+        phone: ph
+      };
       localStorage.setItem("user", JSON.stringify(updated));
 
       document.getElementById("display-username").textContent = updated.username;
