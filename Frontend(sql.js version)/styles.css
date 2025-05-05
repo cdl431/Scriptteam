@@ -178,8 +178,8 @@ footer {
 #search-bar .bar {
   display: flex;
   width: 100%;
-  max-width: 800px; /* Add max-width to avoid it stretching too wide */
-  margin: 0 auto; /* Center the search bar */
+  max-width: 800px; 
+  margin: 0 auto; 
 }
 
 #search-bar input {
@@ -301,6 +301,62 @@ footer {
   flex-direction: column;
   align-items: center;
   width: 100%;
+}
+
+#search-results .pro-container {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 30px;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+#search-results .product {
+  width: 23%;
+  min-width: 250px;
+  padding: 10px 12px;
+  border-radius: 20px;
+  box-shadow: 0 0 20px rgba(64, 64, 64, 0.5);
+  margin: 15px 0;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  position: relative;
+}
+
+#search-results .product img {
+  width: 100%;
+  border-radius: 20px;
+}
+
+#search-results .product .description {
+  text-align: left;
+  padding: 10px 0;
+}
+
+#search-results .product .description h5 {
+  margin: 0;
+  padding-top: 7px;
+  color: #f0f0f0;
+  font-size: 14px;
+}
+
+#search-results .product .description span {
+  display: block;
+  color: #66ccff;
+  font-size: 12px;
+  margin: 5px 0;
+}
+
+#search-results .product .description h4 {
+  margin: 0;
+  padding-top: 7px;
+  font-size: 15px;
+  font-weight: 700;
+  color: #088178;
+}
+
+#search-results .product:hover {
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+  transform: scale(1.05);
 }
 
 /*_____________________________________________________________________________*/
